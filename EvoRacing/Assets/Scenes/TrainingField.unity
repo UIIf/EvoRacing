@@ -484,6 +484,10 @@ PrefabInstance:
       propertyPath: showRays
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 560980032164748384, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
+      propertyPath: maxVel
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2125985158654404081, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -531,6 +535,10 @@ PrefabInstance:
     - target: {fileID: 2125985158654404085, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
       propertyPath: m_Name
       value: Car
+      objectReference: {fileID: 0}
+    - target: {fileID: 6904812736249495946, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
+      propertyPath: lenOfRay
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}

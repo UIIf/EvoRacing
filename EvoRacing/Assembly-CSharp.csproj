@@ -36,9 +36,10 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Car\CarRayInfo.cs" />
      <Compile Include="Assets\WheelScript.cs" />
      <Compile Include="Assets\CarScript.cs" />
-     <Compile Include="Assets\Car\CarRayInfo.cs" />
+     <Compile Include="Assets\Car\CarNN.cs" />
     <Reference Include="UnityEngine">
         <HintPath>S:\Tools\UnityHub\2020.3.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

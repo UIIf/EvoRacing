@@ -790,6 +790,7 @@ GameObject:
   - component: {fileID: 2125985158654404083}
   - component: {fileID: 2125985158654404084}
   - component: {fileID: 6904812736249495946}
+  - component: {fileID: 560980032164748384}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -874,6 +875,19 @@ MonoBehaviour:
   eyeLayerMask:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &560980032164748384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125985158654404085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90d482899cd17d84d9ace69f3e1132d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countOfRays: 5
 --- !u!1 &2125985158897199246
 GameObject:
   m_ObjectHideFlags: 0
