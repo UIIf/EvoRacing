@@ -18,7 +18,7 @@ public class CarRayInfo : MonoBehaviour
 
     private float[] ViewAngles;
 
-    void Start()
+    void Awake()
     {
         ViewAngles = new float[countOfRays];
         
@@ -45,6 +45,8 @@ public class CarRayInfo : MonoBehaviour
         return ret;
     }
 
+    public int GetRaysCount() { return countOfRays; }
+    //delete
     void Update(){
         float[] dists = GetRaysInfo();
 
