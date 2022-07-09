@@ -20,6 +20,7 @@ public class CarRayInfo : MonoBehaviour
 
     void Awake()
     {
+        
         ViewAngles = new float[countOfRays];
         
         for(int i = 0; i < countOfRays; i++){

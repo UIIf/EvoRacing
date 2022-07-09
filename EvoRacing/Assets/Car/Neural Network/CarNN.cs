@@ -4,6 +4,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CarRayInfo))]
+
+
+
 public class CarNN : MonoBehaviour
 {
     float sigmoid(float x){
@@ -12,6 +15,7 @@ public class CarNN : MonoBehaviour
 
     private int countOfRays;
     [SerializeField] float maxVel;
+    [SerializeField] float cur_Vel;
 
     private Rigidbody rb;
     private CarRayInfo cri;
@@ -23,7 +27,7 @@ public class CarNN : MonoBehaviour
     
 
 
-    void InitialiseNN(){
+    public void InitialiseNN(){
         w1 = new float[countOfRays + 2][];
         for(int i = 0; i < countOfRays + 2; i++){
             w1[i] = new float[countOfRays + 3];
@@ -41,6 +45,26 @@ public class CarNN : MonoBehaviour
                 w2[i][j] = Random.Range(-5f,5f);
             }
         }
+
+        initialized = true;
+    }
+
+    public void FillNN(float[][]a, float[][]b){
+        w1 = new float[countOfRays + 2][];
+        for(int i = 0; i < countOfRays + 2; i++){
+            w1[i] = new float[countOfRays + 3];
+            a[i].CopyTo(w1[i], 0);
+        }
+
+        hidenLayer = new float[countOfRays + 3];
+
+        w2 = new float[countOfRays + 4][];
+        for (int i = 0; i < countOfRays + 4; i++){
+            w2[i] = new float[2];
+            b[i].CopyTo(w2[i], 0);
+        }
+
+        initialized = true;
     }
 
     Vector2 predict(float[] input){
@@ -89,12 +113,9 @@ public class CarNN : MonoBehaviour
         print(output);
     }
     void Awake(){
-            
         rb = GetComponent<Rigidbody>();
         cri = GetComponent<CarRayInfo>();
         countOfRays = cri.GetRaysCount();
-        InitialiseNN();
-        initialized = true;
     }
 
     public Vector2 predict(){
@@ -104,7 +125,15 @@ public class CarNN : MonoBehaviour
         for(int i = 0; i < countOfRays; i++){
             input[i] = rays[i];
         }
+        cur_Vel =  rb.velocity.magnitude/maxVel;
         input[countOfRays] = rb.velocity.magnitude/maxVel;
         return predict(input);
+    }
+
+    public float[][] getW1(){
+        return w1;
+    }
+    public float[][] getW2(){
+        return w2;
     }
 }

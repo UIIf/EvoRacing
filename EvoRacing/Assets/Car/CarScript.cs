@@ -35,8 +35,6 @@ public class CarScript : MonoBehaviour
     void ProcessForces()
     {        
         Vector2 output = nn.predict();
-        // Debug.Log((output[0 ]-0.5f * 2).ToString() +" : "+ (output[1 ]-0.5f * 2).ToString() );
-        //Debug.Log(((output[0]-0.5f) * 2).ToString() +" : "+ ((output[1]-0.5f) * 2).ToString());
         verInput = (output[1] - 0.5f) * 2;
         horInput = (output[0] - 0.5f) * 2;
         foreach (WheelScript w in wheels)

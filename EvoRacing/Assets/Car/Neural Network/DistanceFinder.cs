@@ -6,9 +6,9 @@ public class DistanceFinder : MonoBehaviour
 {
     [Tooltip("Treat that given to car when it collides with check point(i think it must be more then any distance between to chek points)")]
     [SerializeField] float treat;
-    [Tooltip("Angle between normals of two check points")]
-    [SerializeField] float angle = 130;
-    
+    [Tooltip("Penalty for crashing in the wall")]
+    [SerializeField] float trick;
+    [SerializeField] LayerMask wallMask;
     private Vector3 prevPos = Vector3.zero;
     [SerializeField] private Vector3 curPos = Vector3.zero;
     private Vector3 curNorm;
@@ -18,45 +18,56 @@ public class DistanceFinder : MonoBehaviour
     private bool touching = false;
     
     private void OnTriggerEnter(Collider other){
-        if(other.tag == "CheckPoint"){
+        switch (other.tag)
+        {
+            case "CheckPoint":
+                if(!valid || touching){
+                    break;
+                }
 
-            if(!valid || touching){
-                return;
-            }
+                //First check point
+                if(curPos == prevPos){
+                    touching = true;
+                    curPos = other.transform.position;
+                    curNorm = other.transform.forward;
+                    break;
+                }
 
-            //First check point
-            if(curPos == prevPos){
+                if(curPos == other.transform.position){
+                    distance += Mathf.Sqrt(temp_dist_sqr);
+                    print("Stop " + distance.ToString());
+                    valid = false;
+                    break;
+                }
+
+                if(prevPos == other.transform.position){
+                    distance -= treat*2 ;
+                    print("Stop " + distance.ToString());
+                    valid = false;
+                }
+
+
+                
                 touching = true;
+                prevPos = curPos;
                 curPos = other.transform.position;
                 curNorm = other.transform.forward;
-                return;
-            }
+                distance += (prevPos - other.transform.position).magnitude;
+                distance += treat;
 
-            if(curPos == other.transform.position){
-                distance += Mathf.Sqrt(temp_dist_sqr);
-                print("Stop " + distance.ToString());
-                valid = false;
-                return;
-            }
-
-            if(prevPos == other.transform.position){
-                distance -= treat*2 ;
-                print("Stop " + distance.ToString());
-                valid = false;
-            }
-
-
+                break;
             
-            touching = true;
-            prevPos = curPos;
-            curPos = other.transform.position;
-            curNorm = other.transform.forward;
-            distance += (prevPos - other.transform.position).magnitude;
-            distance += treat;
         }
+        
     }
 
-    void OnTriggerExit(Collider other){
+    void OnCollisionStay(Collision collisionInfo){
+        if(valid)
+            if(collisionInfo.gameObject.layer == wallMask)
+                distance -= trick*Time.deltaTime;
+    }
+
+    private void OnTriggerExit(Collider other){
         touching = false;
     }
 
@@ -68,5 +79,11 @@ public class DistanceFinder : MonoBehaviour
             }
         }
 
+    }
+
+    public float GetDist(){
+        if(valid)
+            return distance + Mathf.Sqrt(temp_dist_sqr);
+        return distance;
     }
 }

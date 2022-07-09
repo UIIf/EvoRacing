@@ -692,10 +692,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FOVAngle: 140
-  countOfRays: 7
-  lenOfRay: 10
+  countOfRays: 9
+  lenOfRay: 30
   Eye: {fileID: 7096840503798978474}
-  showRays: 1
+  showRays: 0
   eyeLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -711,7 +711,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d482899cd17d84d9ace69f3e1132d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxVel: 50
+  maxVel: 20
+  cur_Vel: 0
 --- !u!114 &6947880229775548568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,7 +726,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treat: 10
-  angle: 180
+  trick: 2
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 64
   curPos: {x: 0, y: 0, z: 0}
   distance: 0
   valid: 1
