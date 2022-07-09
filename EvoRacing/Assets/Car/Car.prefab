@@ -613,6 +613,7 @@ GameObject:
   - component: {fileID: 2125985158654404084}
   - component: {fileID: 6904812736249495946}
   - component: {fileID: 560980032164748384}
+  - component: {fileID: 6947880229775548568}
   m_Layer: 7
   m_Name: Car
   m_TagString: Untagged
@@ -677,6 +678,7 @@ MonoBehaviour:
   - {fileID: 2125985157069787959}
   - {fileID: 2125985158042865241}
   - {fileID: 2125985158180949758}
+  run: 1
 --- !u!114 &6904812736249495946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,6 +712,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVel: 50
+--- !u!114 &6947880229775548568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125985158654404085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4170c72346fd593449c008c37d9befd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treat: 10
+  angle: 180
+  curPos: {x: 0, y: 0, z: 0}
+  distance: 0
+  valid: 1
 --- !u!1 &2125985158897199246
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,14 +1165,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60197ab62745a904f8fe710e5e4b0525, type: 3}
---- !u!1 &2378569038894241253 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 60197ab62745a904f8fe710e5e4b0525, type: 3}
-  m_PrefabInstance: {fileID: 3297538870362876084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3047124251811827551 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60197ab62745a904f8fe710e5e4b0525, type: 3}
+  m_PrefabInstance: {fileID: 3297538870362876084}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2378569038894241253 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 60197ab62745a904f8fe710e5e4b0525, type: 3}
   m_PrefabInstance: {fileID: 3297538870362876084}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &769987666622595529

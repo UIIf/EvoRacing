@@ -11,10 +11,12 @@ public class WheelScript : MonoBehaviour
     private float turnAngle;
     private WheelCollider wcol;
     private Transform wmesh;
+
     void Start()
     {
         wcol = GetComponentInChildren<WheelCollider>();
         wmesh = transform.Find("wheel_mesh");
+        gameObject.transform.parent.GetComponent<CarScript>().wheel_is_ready();
     }
 
     public void Steer(float steerInput)

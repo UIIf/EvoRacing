@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -130,6 +130,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2141575226310173017, guid: 374d26add04127a42b7c03954abb2d1a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2141575226310173017, guid: 374d26add04127a42b7c03954abb2d1a, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6314769464037036215, guid: 374d26add04127a42b7c03954abb2d1a, type: 3}
       propertyPath: m_Name
       value: Straight
@@ -603,7 +611,7 @@ MonoBehaviour:
   cars: []
   start: {fileID: 530964190}
   carPrefab: {fileID: 2125985158654404085, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
-  carNum: 5
+  carNum: 1
 --- !u!1 &1956486476
 GameObject:
   m_ObjectHideFlags: 0

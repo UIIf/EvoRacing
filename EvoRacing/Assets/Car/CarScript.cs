@@ -13,6 +13,8 @@ public class CarScript : MonoBehaviour
 
     public WheelScript[] wheels;
 
+    public bool run = false;
+    private int ready_wheels = 0;
     void Start(){
         
         nn = GetComponent<CarNN>();
@@ -20,26 +22,29 @@ public class CarScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        ProcessForces();
+        if(ready_wheels == 4 && run){
+            ProcessForces();
+        }
+            
+    }
+
+    public void wheel_is_ready(){
+        ready_wheels++;
     }
 
     void ProcessForces()
-    {
-        try
+    {        
+        Vector2 output = nn.predict();
+        // Debug.Log((output[0 ]-0.5f * 2).ToString() +" : "+ (output[1 ]-0.5f * 2).ToString() );
+        //Debug.Log(((output[0]-0.5f) * 2).ToString() +" : "+ ((output[1]-0.5f) * 2).ToString());
+        verInput = (output[1] - 0.5f) * 2;
+        horInput = (output[0] - 0.5f) * 2;
+        foreach (WheelScript w in wheels)
         {
-            Vector2 output = nn.predict();
-            // Debug.Log((output[0 ]-0.5f * 2).ToString() +" : "+ (output[1 ]-0.5f * 2).ToString() );
-            //Debug.Log(((output[0]-0.5f) * 2).ToString() +" : "+ ((output[1]-0.5f) * 2).ToString());
-            verInput = (output[1] - 0.5f) * 2;
-            horInput = (output[0] - 0.5f) * 2;
-            foreach (WheelScript w in wheels)
-            {
-                w.Steer((output[0] - 0.5f) * 2);
-                w.Accelerate((output[1] - 0.5f) * 2 * power);
-                w.UpdatePosition();
-            }
+            w.Steer((output[0] - 0.5f) * 2);
+            w.Accelerate((output[1] - 0.5f) * 2 * power);
+            w.UpdatePosition();
         }
-        catch { }
     }
 
     //void Update()

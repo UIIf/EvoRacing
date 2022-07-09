@@ -19,6 +19,12 @@ public class TrainingManager : MonoBehaviour
         for(int i = 0; i < carNum; i++)
         {
             cars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
+            
+        }
+        
+        for(int i = 0; i < carNum; i++)
+        {
+            cars[i].GetComponent<CarScript>().run = true;
         }
     }
 
