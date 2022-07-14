@@ -3,19 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.EventSystems;
 
-enum Elements
-{
-    Straight,
-    Straight_Long,
-    Turn_60_R,
-    Turn_60_L,
-    Turn_120_R,
-    Turn_120_L,
-    U_Turn,
-    Zigzag,
-    Zigzag_Sharp,
-    Finish
-}
 public class TrackEditorManager : MonoBehaviour
 {
     //delete
@@ -43,7 +30,7 @@ public class TrackEditorManager : MonoBehaviour
         bool clear = true;
         for(int i = 0; i < check.transform.childCount; i++)
         {
-            Collider[] col = Physics.OverlapSphere(check.transform.GetChild(i).transform.position, 4f, LayerMask.GetMask("TrackPrefab"));
+            Collider[] col = Physics.OverlapSphere(check.transform.GetChild(i).transform.position, 5f, LayerMask.GetMask("TrackPrefab", "Wall"));
             if (col.Length != 0) clear = false;
         }
 
@@ -100,9 +87,13 @@ public class TrackEditorManager : MonoBehaviour
 
         foreach (string element in loadStr)
         {
+            if (element == " " || element == "") continue;
+
             selectedPrefab = int.Parse(element);
             Create();
         }
+
+        loadWindow.SetActive(false);
     }
     void Create()
     {
@@ -113,10 +104,12 @@ public class TrackEditorManager : MonoBehaviour
         currentEnd = newPrefab.transform.Find("End");
         listOfEnds.Add(currentEnd);
 
-        RefreshButtonPosition();
+        if (button != null)
+            RefreshButtonPosition();
 
         //delete
-        temp.transform.position = button.transform.position;
+        if(button != null)
+            temp.transform.position = button.transform.position;
     }
 
     void RefreshButtonPosition()
