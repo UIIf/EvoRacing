@@ -6,7 +6,7 @@ using UnityEngine;
 public class NeuralNetwork: ScriptableObject
 {
     public int rayCount;
-    public static float[][] merege_mutate(float[][] a, float[][] b, float presentOfMutation = 0.01f, float mutateRange = 0.01f, float parentPriority = 0.5f){
+    public static float[][] merge_mutate(float[][] a, float[][] b, float presentOfMutation = 0.01f, float mutateRange = 0.01f, float parentPriority = 0.5f){
         if(a.Length != b.Length || a[0].Length != b[0].Length){
             return null;
         }
@@ -34,7 +34,7 @@ public class NeuralNetwork: ScriptableObject
         return ret;
     }
 
-    public static float[][] merege(float[][] a, float[][] b){
+    public static float[][] merge(float[][] a, float[][] b){
         if(a.Length != b.Length || a[0].Length != b[0].Length){
             return null;
         }
