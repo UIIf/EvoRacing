@@ -247,7 +247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8987305568102437436}
   - component: {fileID: 1388422018384032348}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Turn_120_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}

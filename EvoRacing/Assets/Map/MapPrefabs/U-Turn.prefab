@@ -127,7 +127,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8987305568102437436}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: U-Turn
   m_TagString: Untagged
   m_Icon: {fileID: 0}

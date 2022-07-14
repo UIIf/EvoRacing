@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Car\CarRayInfo.cs" />
+    <Compile Include="Assets\Map\TrackEditorManager.cs" />
     <Compile Include="Assets\Car\CarNN.cs" />
     <Compile Include="Assets\Car\WheelScript.cs" />
     <Compile Include="Assets\Car\CarScript.cs" />
