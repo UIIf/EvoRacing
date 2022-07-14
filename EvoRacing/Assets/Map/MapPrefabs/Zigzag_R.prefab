@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7754625496461288056}
   - component: {fileID: 7386702603733874842}
   m_Layer: 8
-  m_Name: Triger (3)
+  m_Name: Trigger (3)
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 4120437429753644040}
   - component: {fileID: 983568364569984439}
   m_Layer: 8
-  m_Name: Triger
+  m_Name: Trigger
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 6289932601855527061}
   - component: {fileID: 6480459610871141671}
   m_Layer: 8
-  m_Name: Triger (1)
+  m_Name: Trigger (1)
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 3309206454842533594}
   - component: {fileID: 1864542111357319196}
   m_Layer: 8
-  m_Name: Triger (4)
+  m_Name: Trigger (4)
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 202106505474560766}
   - component: {fileID: 7016386837221256550}
   m_Layer: 8
-  m_Name: Triger (2)
+  m_Name: Trigger (2)
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

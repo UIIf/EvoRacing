@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 7823283147169120788}
   - component: {fileID: 5511300546035077184}
   m_Layer: 8
-  m_Name: Triger (1)
+  m_Name: Trigger (1)
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 7097461259034799105}
   - component: {fileID: 1201921704205154893}
   m_Layer: 8
-  m_Name: Triger
+  m_Name: Trigger
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

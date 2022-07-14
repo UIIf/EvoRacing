@@ -21,9 +21,8 @@ public class CarNN : MonoBehaviour
     private CarRayInfo cri;
 
     private float[][] w1;
-    private float[] hidenLayer;
+    private float[] hiddenLayer;
     private float[][] w2;
-    private bool initialized = false;
     
 
 
@@ -36,7 +35,7 @@ public class CarNN : MonoBehaviour
             }
         }
 
-        hidenLayer = new float[countOfRays + 3];
+        hiddenLayer = new float[countOfRays + 3];
 
         w2 = new float[countOfRays + 4][];
         for (int i = 0; i < countOfRays + 4; i++){
@@ -46,7 +45,6 @@ public class CarNN : MonoBehaviour
             }
         }
 
-        initialized = true;
     }
 
     public void FillNN(float[][]a, float[][]b){
@@ -56,7 +54,7 @@ public class CarNN : MonoBehaviour
             a[i].CopyTo(w1[i], 0);
         }
 
-        hidenLayer = new float[countOfRays + 3];
+        hiddenLayer = new float[countOfRays + 3];
 
         w2 = new float[countOfRays + 4][];
         for (int i = 0; i < countOfRays + 4; i++){
@@ -64,22 +62,21 @@ public class CarNN : MonoBehaviour
             b[i].CopyTo(w2[i], 0);
         }
 
-        initialized = true;
     }
 
     Vector2 predict(float[] input){
-        for(int i = 0; i < hidenLayer.Length; i++){
-            hidenLayer[i] = 0;
+        for(int i = 0; i < hiddenLayer.Length; i++){
+            hiddenLayer[i] = 0;
             for(int j = 0; j < input.Length; j++){
-                hidenLayer[i] += w1[j][i] * input[j];
+                hiddenLayer[i] += w1[j][i] * input[j];
             }
-            hidenLayer[i] = sigmoid(hidenLayer[i] + w1[w1.Length - 1][i]);
+            hiddenLayer[i] = sigmoid(hiddenLayer[i] + w1[w1.Length - 1][i]);
         }
         Vector2 output = Vector2.zero;
 
         for(int i = 0; i < 2; i++){
-            for(int j = 0; j < hidenLayer.Length; j++){
-                output[i] += w2[j][i]*hidenLayer[j];
+            for(int j = 0; j < hiddenLayer.Length; j++){
+                output[i] += w2[j][i]* hiddenLayer[j];
             }
             output[i] = sigmoid(output[i] + w2[w2.Length - 1][i]);
         }

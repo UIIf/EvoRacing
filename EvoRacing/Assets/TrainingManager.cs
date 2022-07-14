@@ -17,7 +17,7 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] int fromTwoParents = 5;
 
     [Range(0f, 1f)]
-    [SerializeField] float persrntOfMutation = 0.1f;
+    [SerializeField] float percentOfMutation = 0.1f;
 
     [SerializeField] float mutationValue = 0.5f;
 
@@ -46,16 +46,14 @@ public class TrainingManager : MonoBehaviour
 
     void Training(){
         startTrainingSession = false;
-        float[] scors = new float[cars.Length];
+        float[] scorås = new float[cars.Length];
         string output = "Scores : ";
         for(int i = 0; i < cars.Length; i++){
-            scors[i] = cars[i].GetComponent<DistanceFinder>().GetDist();
-            output +=  scors[i].ToString() + " ";
+            scorås[i] = cars[i].GetComponent<DistanceFinder>().GetDist();
+            output += scorås[i].ToString() + " ";
         }
 
         print(output);
-        
-
 
         int newCarNum = carNum;
         GameObject[] newCars = new GameObject[carNum];
@@ -68,7 +66,7 @@ public class TrainingManager : MonoBehaviour
 
             // Find new parents
             
-            if(scors[0] > scors[1]){
+            if(scorås[0] > scorås[1]){
                 max_ = 0;
                 semi_max = 1;
             }
@@ -76,17 +74,17 @@ public class TrainingManager : MonoBehaviour
                 max_ = 1;
                 semi_max = 0;
             }
-            for(int i = 2; i < scors.Length; i++){
-                if(scors[i] > scors[max_]){
+            for(int i = 2; i < scorås.Length; i++){
+                if(scorås[i] > scorås[max_]){
                     semi_max = max_;
                     max_ = i;
                 }
-                else if(scors[i] > scors[semi_max]){
+                else if(scorås[i] > scorås[semi_max]){
                     semi_max = i;
                 }
             }
 
-            print(max_.ToString() + " : " +scors[max_].ToString() + "; " + semi_max.ToString()+ " : " +scors[semi_max].ToString() );
+            print(max_.ToString() + " : " + scorås[max_].ToString() + "; " + semi_max.ToString()+ " : " + scorås[semi_max].ToString() );
 
             
 
@@ -99,20 +97,20 @@ public class TrainingManager : MonoBehaviour
 
             // Mutated childrens
 
-            priority = scors[max_]/(scors[max_] + scors[semi_max]);
+            priority = scorås[max_]/(scorås[max_] + scorås[semi_max]);
             for(int i = offset*fromTwoParents; i < (offset + 1)*fromTwoParents - 2; i++){
                 newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-                newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merege_mutate(maxW1, semi_maxW1, persrntOfMutation, mutationValue, priority), NeuralNetwork.merege_mutate(maxW2, semi_maxW2, persrntOfMutation, mutationValue, priority));
+                newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merege_mutate(maxW1, semi_maxW1, percentOfMutation, mutationValue, priority), NeuralNetwork.merege_mutate(maxW2, semi_maxW2, percentOfMutation, mutationValue, priority));
             }
-            scors[max_] = -100000000000000;
-            scors[semi_max] = -100000000000000;
+            scorås[max_] = -100000000000000;
+            scorås[semi_max] = -100000000000000;
             // Mutated parents
             
             newCars[(offset + 1)*fromTwoParents - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[(offset + 1)*fromTwoParents - 2].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(maxW1, persrntOfMutation, mutationValue), NeuralNetwork.mutate(maxW2, persrntOfMutation, mutationValue));
+            newCars[(offset + 1)*fromTwoParents - 2].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(maxW1, percentOfMutation, mutationValue), NeuralNetwork.mutate(maxW2, percentOfMutation, mutationValue));
 
             newCars[(offset + 1)*fromTwoParents - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[(offset + 1)*fromTwoParents - 1].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(maxW1, persrntOfMutation, mutationValue), NeuralNetwork.mutate(maxW2, persrntOfMutation, mutationValue));
+            newCars[(offset + 1)*fromTwoParents - 1].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(maxW1, percentOfMutation, mutationValue), NeuralNetwork.mutate(maxW2, percentOfMutation, mutationValue));
 
             offset ++;
             newCarNum -= fromTwoParents;
@@ -120,7 +118,7 @@ public class TrainingManager : MonoBehaviour
 
         //Other childrens
 
-        if(scors[0] > scors[1]){
+        if(scorås[0] > scorås[1]){
             max_ = 0;
             semi_max = 1;
         }
@@ -128,14 +126,14 @@ public class TrainingManager : MonoBehaviour
             max_ = 1;
             semi_max = 0;
         }
-        for(int i = 2; i < scors.Length; i++){
-            if(scors[i] > max_){
+        for(int i = 2; i < scorås.Length; i++){
+            if(scorås[i] > max_){
                 semi_max = max_;
                 max_ = i;
             }
         }
 
-        print(max_.ToString() + " : " +scors[max_].ToString() + "; " + semi_max.ToString()+ " : " +scors[semi_max].ToString() );
+        print(max_.ToString() + " : " + scorås[max_].ToString() + "; " + semi_max.ToString()+ " : " + scorås[semi_max].ToString() );
 
         maxW1 = cars[max_].GetComponent<CarNN>().getW1();
         maxW2 = cars[max_].GetComponent<CarNN>().getW2();
@@ -144,11 +142,11 @@ public class TrainingManager : MonoBehaviour
         semi_maxW2 = cars[semi_max].GetComponent<CarNN>().getW2();
 
         // Mutated childrens
-        priority = scors[max_]/(scors[max_] + scors[semi_max]);
+        priority = scorås[max_]/(scorås[max_] + scorås[semi_max]);
         for(int i = offset*fromTwoParents; i < offset*fromTwoParents  + newCarNum - 2; i++){
             newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
 
-            newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merege_mutate(maxW1, semi_maxW1, persrntOfMutation, mutationValue, priority), NeuralNetwork.merege_mutate(maxW2, semi_maxW2, persrntOfMutation, mutationValue,priority));
+            newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merege_mutate(maxW1, semi_maxW1, percentOfMutation, mutationValue, priority), NeuralNetwork.merege_mutate(maxW2, semi_maxW2, percentOfMutation, mutationValue,priority));
         }
         
         // Mutated parents
