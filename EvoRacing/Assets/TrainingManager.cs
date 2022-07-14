@@ -46,11 +46,11 @@ public class TrainingManager : MonoBehaviour
 
     void Training(){
         startTrainingSession = false;
-        float[] scorås = new float[cars.Length];
+        float[] scores = new float[cars.Length];
         string output = "Scores : ";
         for(int i = 0; i < cars.Length; i++){
-            scorås[i] = cars[i].GetComponent<DistanceFinder>().GetDist();
-            output += scorås[i].ToString() + " ";
+            scores[i] = cars[i].GetComponent<DistanceFinder>().GetDist();
+            output += scores[i].ToString() + " ";
         }
 
         print(output);
@@ -66,7 +66,7 @@ public class TrainingManager : MonoBehaviour
 
             // Find new parents
             
-            if(scorås[0] > scorås[1]){
+            if(scores[0] > scores[1]){
                 max_ = 0;
                 semi_max = 1;
             }
@@ -74,17 +74,17 @@ public class TrainingManager : MonoBehaviour
                 max_ = 1;
                 semi_max = 0;
             }
-            for(int i = 2; i < scorås.Length; i++){
-                if(scorås[i] > scorås[max_]){
+            for(int i = 2; i < scores.Length; i++){
+                if(scores[i] > scores[max_]){
                     semi_max = max_;
                     max_ = i;
                 }
-                else if(scorås[i] > scorås[semi_max]){
+                else if(scores[i] > scores[semi_max]){
                     semi_max = i;
                 }
             }
 
-            print(max_.ToString() + " : " + scorås[max_].ToString() + "; " + semi_max.ToString()+ " : " + scorås[semi_max].ToString() );
+            print(max_.ToString() + " : " + scores[max_].ToString() + "; " + semi_max.ToString()+ " : " + scores[semi_max].ToString() );
 
             
 
@@ -97,20 +97,20 @@ public class TrainingManager : MonoBehaviour
 
             // Mutated childrens
 
-            priority = scorås[max_]/(scorås[max_] + scorås[semi_max]);
+            priority = scores[max_]/(scores[max_] + scores[semi_max]);
             for(int i = offset*fromTwoParents; i < (offset + 1)*fromTwoParents - 2; i++){
                 newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
                 newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(maxW1, semi_maxW1, percentOfMutation, mutationValue, priority), NeuralNetwork.merge_mutate(maxW2, semi_maxW2, percentOfMutation, mutationValue, priority));
             }
-            scorås[max_] = -100000000000000;
-            scorås[semi_max] = -100000000000000;
+            scores[max_] = -100000000000000;
+            scores[semi_max] = -100000000000000;
             // Mutated parents
             
             newCars[(offset + 1)*fromTwoParents - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[(offset + 1)*fromTwoParents - 2].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(maxW1, percentOfMutation, mutationValue), NeuralNetwork.mutate(maxW2, percentOfMutation, mutationValue));
+            newCars[(offset + 1)*fromTwoParents - 2].GetComponent<CarNN>().FillNN(maxW1, maxW2);
 
             newCars[(offset + 1)*fromTwoParents - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[(offset + 1)*fromTwoParents - 1].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(maxW1, percentOfMutation, mutationValue), NeuralNetwork.mutate(maxW2, percentOfMutation, mutationValue));
+            newCars[(offset + 1)*fromTwoParents - 1].GetComponent<CarNN>().FillNN(semi_maxW1, semi_maxW2);
 
             offset ++;
             newCarNum -= fromTwoParents;
@@ -118,7 +118,7 @@ public class TrainingManager : MonoBehaviour
 
         //Other childrens
 
-        if(scorås[0] > scorås[1]){
+        if(scores[0] > scores[1]){
             max_ = 0;
             semi_max = 1;
         }
@@ -126,14 +126,14 @@ public class TrainingManager : MonoBehaviour
             max_ = 1;
             semi_max = 0;
         }
-        for(int i = 2; i < scorås.Length; i++){
-            if(scorås[i] > max_){
+        for(int i = 2; i < scores.Length; i++){
+            if(scores[i] > max_){
                 semi_max = max_;
                 max_ = i;
             }
         }
 
-        print(max_.ToString() + " : " + scorås[max_].ToString() + "; " + semi_max.ToString()+ " : " + scorås[semi_max].ToString() );
+        print(max_.ToString() + " : " + scores[max_].ToString() + "; " + semi_max.ToString()+ " : " + scores[semi_max].ToString() );
 
         maxW1 = cars[max_].GetComponent<CarNN>().getW1();
         maxW2 = cars[max_].GetComponent<CarNN>().getW2();
@@ -142,7 +142,7 @@ public class TrainingManager : MonoBehaviour
         semi_maxW2 = cars[semi_max].GetComponent<CarNN>().getW2();
 
         // Mutated childrens
-        priority = scorås[max_]/(scorås[max_] + scorås[semi_max]);
+        priority = scores[max_]/(scores[max_] + scores[semi_max]);
         for(int i = offset*fromTwoParents; i < offset*fromTwoParents  + newCarNum - 2; i++){
             newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
 
@@ -155,7 +155,7 @@ public class TrainingManager : MonoBehaviour
         newCars[offset*fromTwoParents  + newCarNum - 2].GetComponent<CarNN>().FillNN(maxW1, maxW2);
 
         newCars[offset*fromTwoParents  + newCarNum - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-        newCars[offset*fromTwoParents  + newCarNum - 1].GetComponent<CarNN>().FillNN(maxW1, maxW2);
+        newCars[offset*fromTwoParents  + newCarNum - 1].GetComponent<CarNN>().FillNN(semi_maxW1, semi_maxW2);
 
         for(int i = 0; i < cars.Length; i++){
             Destroy( cars[i]);
