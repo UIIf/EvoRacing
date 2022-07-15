@@ -26,7 +26,13 @@ public class NeuralNetwork: ScriptableObject
 
                 //Mutation
                 if(rand < 10000 * presentOfMutation){
-                    ret[i][j] += rand = Random.Range(-mutateRange, mutateRange);
+                    ret[i][j] += Random.Range(-mutateRange, mutateRange);
+                    // if(ret[i][j] > 1){
+                    //     ret[i][j] = 1;
+                    // }
+                    // else if(ret[i][j] < -1){
+                    //     ret[i][j] = -1;
+                    // }
                 }
             }
         }
@@ -73,7 +79,13 @@ public class NeuralNetwork: ScriptableObject
 
                 //Mutation
                 if(rand < 10000 * presentOfMutation){
-                    ret[i][j] += rand = Random.Range(-mutateRange, mutateRange);
+                    ret[i][j] += Random.Range(-mutateRange, mutateRange);
+                    // if(ret[i][j] > 1){
+                    //     ret[i][j] = 1;
+                    // }
+                    // else if(ret[i][j] < -1){
+                    //     ret[i][j] = -1;
+                    // }
                 }
             }
         }

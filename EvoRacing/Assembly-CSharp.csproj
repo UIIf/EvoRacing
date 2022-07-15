@@ -42,8 +42,9 @@
      <Compile Include="Assets\Car\Neural Network\CarNN.cs" />
      <Compile Include="Assets\Car\WheelScript.cs" />
      <Compile Include="Assets\Car\CarScript.cs" />
-     <Compile Include="Assets\Car\Neural Network\DistanceFinder.cs" />
      <Compile Include="Assets\TrainingManager.cs" />
+     <Compile Include="Assets\Car\Neural Network\DistanceFinder.cs" />
+     <Compile Include="Assets\UIElements\GetTime.cs" />
     <Reference Include="UnityEngine">
         <HintPath>S:\Tools\UnityHub\2020.3.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

@@ -31,7 +31,7 @@ public class CarNN : MonoBehaviour
         for(int i = 0; i < countOfRays + 2; i++){
             w1[i] = new float[countOfRays + 3];
             for(int j = 0; j < countOfRays + 3; j++){
-                w1[i][j] = Random.Range(-5f,5f);
+                w1[i][j] = Random.Range(-1f,1f);
             }
         }
 
@@ -41,7 +41,7 @@ public class CarNN : MonoBehaviour
         for (int i = 0; i < countOfRays + 4; i++){
             w2[i] = new float[2];
             for(int j = 0; j < 2; j++){
-                w2[i][j] = Random.Range(-5f,5f);
+                w2[i][j] = Random.Range(-1f,1f);
             }
         }
 
