@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.UI;
 
 public class TrainingManager : MonoBehaviour
 {
     [SerializeField] GameObject[] cars;
     [SerializeField] Transform start;
     [SerializeField] GameObject carPrefab;
+
+    [SerializeField] GameObject ScrollView;
+    [SerializeField] GameObject carItem;
     private Vector3 spawnPoint;
 
     [Min(1)]
@@ -28,6 +32,8 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] private float curTime;
     [SerializeField] private bool isStartedTraining;
     [SerializeField] private bool AutoStart = true;
+
+    private bool pauseCars = true;
 
     public float GetMaxTime(){
         return time;
@@ -50,12 +56,25 @@ public class TrainingManager : MonoBehaviour
     [ContextMenu("Start")]
     public void startTrainingSession(){
         if(!isStartedTraining){
-            for(int i = 0; i < carNum; i++)
+            foreach(GameObject car in cars)
             {
-                cars[i].GetComponent<CarScript>().run = true;
+                car.GetComponent<CarScript>().run = true;
             }
             isStartedTraining  = true;
+            pauseCars = false;
             curTime = 0;
+        }
+    }
+
+    public void pauseTrainingSession(){
+        if(isStartedTraining && !pauseCars){
+            foreach(GameObject car in cars)
+            {
+                car.GetComponent<CarScript>().run = false;
+            }
+            pauseCars = true;
+            // isStartedTraining  = true;
+            // curTime = 0;
         }
     }
 
@@ -209,11 +228,25 @@ public class TrainingManager : MonoBehaviour
 
     }
 
+
+    [ContextMenu("CreateTable")]
+    public void CreateTable(){
+        pauseTrainingSession();
+        ScrollView.SetActive(true);
+        Transform content = ScrollView.transform.GetChild(0).transform.GetChild(0);
+        cars = cars.OrderBy((car) => car.GetComponent<DistanceFinder>().GetDist()).Reverse<GameObject>().ToArray<GameObject>();
+        foreach(GameObject car in cars){
+            GameObject temp = Instantiate(carItem, content);
+            temp.transform.GetChild(1).GetComponent<Text>().text = "Score: " + car.GetComponent<DistanceFinder>().GetDist().ToString("0,000");
+            temp.transform.parent = content;
+        }
+    }
     void Update()
     {
-        if(isStartedTraining){
+        if(isStartedTraining && !pauseCars){
             curTime += Time.deltaTime;
             if(curTime > time){
+                
                 Training();
             }
         }

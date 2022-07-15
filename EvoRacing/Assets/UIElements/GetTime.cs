@@ -14,6 +14,6 @@ public class GetTime : MonoBehaviour
     [SerializeField] Text txt;
 
     void Update(){
-        txt.text = Before + (Mathf.Round(tm.GetMaxTime()*Mathf.Pow(10,r))/Mathf.Pow(10,r)).ToString() + Into + (Mathf.Round(tm.GetCurrentTime()*Mathf.Pow(10,r))/Mathf.Pow(10,r)).ToString() + After;
+        txt.text = Before + (Mathf.Round(tm.GetMaxTime())).ToString() + Into + (tm.GetCurrentTime()).ToString("0.00") + After;
     }
 }

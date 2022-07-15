@@ -23,6 +23,8 @@ public class CarNN : MonoBehaviour
     private float[][] w1;
     private float[] hiddenLayer;
     private float[][] w2;
+
+    private bool initialized = false;
     
 
 
@@ -44,7 +46,7 @@ public class CarNN : MonoBehaviour
                 w2[i][j] = Random.Range(-1f,1f);
             }
         }
-
+        initialized = true;
     }
 
     public void FillNN(float[][]a, float[][]b){
@@ -61,7 +63,7 @@ public class CarNN : MonoBehaviour
             w2[i] = new float[2];
             b[i].CopyTo(w2[i], 0);
         }
-
+        initialized = true;
     }
 
     Vector2 predict(float[] input){
@@ -132,5 +134,73 @@ public class CarNN : MonoBehaviour
     }
     public float[][] getW2(){
         return w2;
+    }
+
+    [ContextMenu("Jopa")]
+    public void SaveNN()
+    {
+        int slot = 3;
+        if(!initialized){
+            print("Error");
+            return;
+        }
+
+        string saveStr = "";
+        foreach (float[] element in w1)
+        {
+            
+            foreach(float num in element)
+            {
+                saveStr += num.ToString() + " ";
+            }
+        }
+        foreach (float[] element in w2)
+        {
+            
+            foreach(float num in element)
+            {
+                saveStr += num.ToString() + " ";
+            }
+        }
+
+        print(saveStr);
+
+        PlayerPrefs.SetString("SlotNN" + slot.ToString(), saveStr);
+
+        // saveWindow.SetActive(false);
+    }
+
+    [ContextMenu("Load Jopa")]
+    public void LoadTrack()
+    {
+        int slot = 3;
+        string[] loadStr = PlayerPrefs.GetString("SlotNN" + slot.ToString()).Split(' ');
+
+        int counter = 0;
+
+        w1 = new float[countOfRays + 2][];
+        for(int i = 0; i < countOfRays + 2; i++){
+            w1[i] = new float[countOfRays + 3];
+            for(int j = 0; j < countOfRays + 3; j++){
+                w1[i][j] = float.Parse(loadStr[counter]);
+                counter++;
+            }
+            
+        }
+
+        hiddenLayer = new float[countOfRays + 3];
+
+        w2 = new float[countOfRays + 4][];
+        for (int i = 0; i < countOfRays + 4; i++){
+            w2[i] = new float[2];
+            for(int j = 0; j < 2; j++){
+                w2[i][j] = float.Parse(loadStr[counter]);
+                counter++;
+            }
+        }
+
+        initialized = true;
+        print("NICEEEEEEEE");
+        // loadWindow.SetActive(false);
     }
 }
