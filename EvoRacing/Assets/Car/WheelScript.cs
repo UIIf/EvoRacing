@@ -6,7 +6,6 @@ public class WheelScript : MonoBehaviour
 {
     public bool powered = false;
     public float maxAngle = 45f;
-    public float offset = 0f;
 
     private float turnAngle;
     private WheelCollider wcol;
@@ -21,14 +20,15 @@ public class WheelScript : MonoBehaviour
 
     public void Steer(float steerInput)
     {
-        turnAngle = steerInput * maxAngle + offset;
+        turnAngle = steerInput * maxAngle;
         wcol.steerAngle = turnAngle;
     }
 
-    public void Accelerate(float powerInput)
+    public void Accelerate(float powerInput, float brakeTorque)
     {
-        if (powered) wcol.motorTorque = powerInput;
-        //else wcol.brakeTorque = 0;
+        if (powered && powerInput > 0) wcol.motorTorque = powerInput;
+        else if (powerInput < 0) wcol.brakeTorque = -brakeTorque;
+        else wcol.brakeTorque = 0;
     }
 
     public void UpdatePosition()

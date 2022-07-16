@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powered: 1
   maxAngle: 0
-  offset: 0
 --- !u!1 &2125985157180021067
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,13 +99,13 @@ WheelCollider:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 0.5
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 0.95
     m_AsymptoteSlip: 0.5
-    m_AsymptoteValue: 0.85
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &2125985157252453923
@@ -304,13 +303,13 @@ WheelCollider:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 0.5
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 0.95
     m_AsymptoteSlip: 0.5
-    m_AsymptoteValue: 0.75
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &2125985157845130256
@@ -390,8 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  maxAngle: 25
-  offset: 0
+  maxAngle: 45
 --- !u!1 &2125985158180949744
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,8 +436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  maxAngle: 25
-  offset: 0
+  maxAngle: 45
 --- !u!1 &2125985158259963272
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +596,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powered: 1
   maxAngle: 0
-  offset: 0
 --- !u!1 &2125985158654404085
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,7 +666,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4e5a3d3f773d64aa77b7d863c57558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 100
+  power: 300
+  brakeTorque: 4000
   horInput: 0
   verInput: 0
   wheels:
@@ -692,7 +689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FOVAngle: 190
-  countOfRays: 9
+  countOfRays: 11
   lenOfRay: 15
   Eye: {fileID: 7096840503798978474}
   showRays: 1
@@ -711,7 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d482899cd17d84d9ace69f3e1132d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxVel: 20
+  maxVel: 40
   cur_Vel: 0
 --- !u!114 &6947880229775548568
 MonoBehaviour:
@@ -866,13 +863,13 @@ WheelCollider:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 0.5
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 0.95
     m_AsymptoteSlip: 0.5
-    m_AsymptoteValue: 0.75
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &2125985159047451214
@@ -927,13 +924,13 @@ WheelCollider:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 0.5
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 0.95
     m_AsymptoteSlip: 0.5
-    m_AsymptoteValue: 0.75
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &2125985159068979760

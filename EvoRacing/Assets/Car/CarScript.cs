@@ -6,6 +6,7 @@ public class CarScript : MonoBehaviour
 {
     CarNN nn;
     public float power = 1500f;
+    public float brakeTorque;
 
     public float horInput;
     public float verInput;
@@ -20,30 +21,40 @@ public class CarScript : MonoBehaviour
         nn = GetComponent<CarNN>();
     }
 
+    //NN Control
     void FixedUpdate()
     {
-        if(ready_wheels == 4 && run){
+        if (ready_wheels == 4 && run)
+        {
             ProcessForces();
         }
-            
+
     }
 
-    public void wheel_is_ready(){
+    public void wheel_is_ready()
+    {
         ready_wheels++;
     }
 
     void ProcessForces()
-    {        
+    {
         Vector2 output = nn.predict();
         verInput = (output[1] - 0.5f) * 2;
         horInput = (output[0] - 0.5f) * 2;
         foreach (WheelScript w in wheels)
         {
             w.Steer((output[0] - 0.5f) * 2);
-            w.Accelerate((output[1] - 0.5f) * 2 * power);
+            w.Accelerate((output[1] - 0.5f) * 2 * power, (output[1] - 0.5f) * 2 * brakeTorque);
             w.UpdatePosition();
         }
     }
+
+    //Manual Control
+
+    //void FixedUpdate()
+    //{
+    //    ProcessForces();
+    //}
 
     //void Update()
     //{
@@ -61,7 +72,7 @@ public class CarScript : MonoBehaviour
     //    foreach (WheelScript w in wheels)
     //    {
     //        w.Steer(horInput);
-    //        w.Accelerate(verInput * power);
+    //        w.Accelerate(verInput * power, verInput * brakeTorque);
     //        w.UpdatePosition();
     //    }
     //}
