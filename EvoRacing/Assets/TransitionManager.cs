@@ -18,4 +18,9 @@ public class TransitionManager : MonoBehaviour
     {
         SceneManager.LoadScene(2);
     }
+
+    public void ToEditor()
+    {
+        SceneManager.LoadScene(3);
+    }
 }

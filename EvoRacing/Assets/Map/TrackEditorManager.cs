@@ -9,7 +9,7 @@ public class TrackEditorManager : MonoBehaviour
     [SerializeField] Transform temp;
 
     [SerializeField] Transform currentEnd;
-    [SerializeField] Transform button;
+    [SerializeField] GameObject button;
     [SerializeField] GameObject[] prefabs;
     [SerializeField] GameObject[] checkPrefabs;
     [SerializeField] int selectedPrefab = 0;
@@ -49,10 +49,18 @@ public class TrackEditorManager : MonoBehaviour
         listOfEnds.RemoveAt(listOfEnds.Count - 1);
         listForSave.RemoveAt(listForSave.Count - 1);
         currentEnd = listOfEnds[listOfEnds.Count - 1];
-        RefreshButtonPosition();
+
+        if (button != null)
+        {
+            if (!button.activeSelf)
+                button.SetActive(true);
+
+            RefreshButtonPosition();
+        }
 
         //delete
-        temp.transform.position = button.transform.position;
+        if (button != null)
+            temp.transform.position = button.transform.position;
     }
     
     public void setSelectedPrefab(int value) { selectedPrefab = value; }
@@ -60,10 +68,10 @@ public class TrackEditorManager : MonoBehaviour
     public void SaveButton() { saveWindow.SetActive(true); }
     public void SaveTrack(int slot)
     {
-        if (listForSave.Count != 0 && listForSave[listForSave.Count - 1] != 12)
-        {
+        if (listForSave.Count == 0)
+            print("Нет объектов");
+        else if (listForSave[listForSave.Count - 1] != 12)
             print("Нет финиша");
-        }
         else
         {
             string saveStr = "";
@@ -104,18 +112,21 @@ public class TrackEditorManager : MonoBehaviour
         currentEnd = newPrefab.transform.Find("End");
         listOfEnds.Add(currentEnd);
 
-        if (button != null)
-            RefreshButtonPosition();
+        if (button != null) { 
+            RefreshButtonPosition();}
 
         //delete
         if(button != null)
             temp.transform.position = button.transform.position;
+
+        if (button != null && selectedPrefab == 12)
+            button.SetActive(false);
     }
 
     void RefreshButtonPosition()
     {
         button.transform.position = new Vector3(currentEnd.position.x, currentEnd.position.y, currentEnd.position.z);
         button.transform.rotation = Quaternion.Euler(currentEnd.rotation.eulerAngles + new Vector3(90f, 0f, 0f));
-        button.transform.position += button.right * 3f;
+        button.transform.position += button.transform.right * 3f;
     }
 }
