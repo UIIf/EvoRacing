@@ -13,6 +13,7 @@ public class TrainingManager : MonoBehaviour
 
     [SerializeField] GameObject ScrollView;
     [SerializeField] GameObject carItem;
+    [SerializeField] GameObject UITime;
     private Vector3 spawnPoint;
 
     [Min(1)]
@@ -255,4 +256,18 @@ public class TrainingManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
+
+    public void IncreaseTime() { 
+        if(time < 180)
+            time += 5; 
+        RefreshUITime(); 
+    }
+
+    public void ReduceTime() { 
+        if(time > 5)
+            time -= 5; 
+        RefreshUITime(); 
+    }
+
+    private void RefreshUITime() { UITime.GetComponent<Text>().text = time.ToString() + " сек."; }
 }

@@ -10,7 +10,7 @@ public class GetTime : MonoBehaviour
     [SerializeField] string After;
     [Min(0)]
     [SerializeField] int r;
-    [SerializeField]TrainingManager tm;
+    [SerializeField] TrainingManager tm;
     [SerializeField] Text txt;
 
     void Update(){

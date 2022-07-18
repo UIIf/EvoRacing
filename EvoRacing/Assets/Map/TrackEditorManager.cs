@@ -12,17 +12,28 @@ public class TrackEditorManager : MonoBehaviour
     [SerializeField] GameObject button;
     [SerializeField] GameObject[] prefabs;
     [SerializeField] GameObject[] checkPrefabs;
-    [SerializeField] int selectedPrefab = 0;
     [SerializeField] GameObject saveWindow;
     [SerializeField] GameObject loadWindow;
+    [SerializeField] bool AutoLoad;
+
+    int selectedPrefab = 0;
 
     List<Transform> listOfEnds = new List<Transform>();
     List<GameObject> listOfPrefabs = new List<GameObject>();
     List<int> listForSave = new List<int>();
 
+
+
     public void Start()
     {
         listOfEnds.Add(currentEnd);
+
+        if (AutoLoad)
+        {
+            int slot = PlayerPrefs.GetInt("LastUsed");
+            if(slot != 0)
+                LoadTrack(slot);
+        }
     }
     public void Check()
     {
@@ -81,6 +92,7 @@ public class TrackEditorManager : MonoBehaviour
             }
 
             PlayerPrefs.SetString("Slot" + slot.ToString(), saveStr);
+            PlayerPrefs.SetInt("LastUsed", slot);
         }
 
         saveWindow.SetActive(false);
@@ -100,6 +112,8 @@ public class TrackEditorManager : MonoBehaviour
             selectedPrefab = int.Parse(element);
             Create();
         }
+
+        PlayerPrefs.SetInt("LastUsed", slot);
 
         loadWindow.SetActive(false);
     }
