@@ -34,6 +34,9 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] private bool isStartedTraining;
     [SerializeField] private bool AutoStart = true;
 
+    [Range(1f, 5f)]
+    [SerializeField] float timeScale = 1f;
+
     private bool pauseCars = true;
 
     public float GetMaxTime(){
@@ -256,6 +259,8 @@ public class TrainingManager : MonoBehaviour
     }
     void Update()
     {
+        Time.timeScale = timeScale;
+
         if(isStartedTraining && !pauseCars){
             curTime += Time.deltaTime;
             if(curTime > time){
@@ -263,6 +268,7 @@ public class TrainingManager : MonoBehaviour
                 Training();
             }
         }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

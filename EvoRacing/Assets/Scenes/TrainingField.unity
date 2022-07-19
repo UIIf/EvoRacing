@@ -629,7 +629,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "20 \u0441\u0435\u043A."
+  m_Text: "10 \u0441\u0435\u043A."
 --- !u!222 &405678122
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2309,14 +2309,15 @@ MonoBehaviour:
   ScrollView: {fileID: 937445636}
   carItem: {fileID: 1587754691064613840, guid: d666207a4b7050546af36a1b29a12694, type: 3}
   UITime: {fileID: 405678119}
-  carNum: 90
-  fromTwoParents: 35
+  carNum: 60
+  fromTwoParents: 30
   percentOfMutation: 0.1
-  mutationValue: 3
-  time: 20
+  mutationValue: 1
+  time: 10
   curTime: 0
   isStartedTraining: 0
   AutoStart: 1
+  timeScale: 1
 --- !u!1 &1250077034
 GameObject:
   m_ObjectHideFlags: 0
