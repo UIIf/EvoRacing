@@ -4146,9 +4146,9 @@ MonoBehaviour:
   - {fileID: 6314769464037036215, guid: 28e0296a84bc4a94aac3c2b389744847, type: 3}
   - {fileID: 6314769464037036215, guid: e51c51da34c6ab043b61853695e13b35, type: 3}
   - {fileID: 6314769464037036215, guid: b1a838197563b244abf33710f8fd36c7, type: 3}
-  selectedPrefab: 0
   saveWindow: {fileID: 1289278454}
   loadWindow: {fileID: 1659086688}
+  AutoLoad: 0
 --- !u!4 &1365123376
 Transform:
   m_ObjectHideFlags: 0
@@ -5791,8 +5791,8 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_ScreenMatchMode: 2
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -5809,7 +5809,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 2132375362}
-  m_PlaneDistance: 6.06
+  m_PlaneDistance: 2
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -6218,7 +6218,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1134239313}
   m_HandleRect: {fileID: 1134239312}
   m_Direction: 0
-  m_Value: 0.00000006622271
+  m_Value: 0.00000009933407
   m_Size: 0.38962585
   m_NumberOfSteps: 0
   m_OnValueChanged:
