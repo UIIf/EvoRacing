@@ -21,9 +21,11 @@ public class CarNN : MonoBehaviour
     private CarRayInfo cri;
 
     private float[][] w1;
-    private float[] hiddenLayer;
+    private float[] hiddenLayer1;
     private float[][] w2;
 
+    private float[] hiddenLayer2;
+    private float[][] w3;
     private bool initialized = false;
     
 
@@ -31,56 +33,85 @@ public class CarNN : MonoBehaviour
     public void InitialiseNN(){
         w1 = new float[countOfRays + 2][];
         for(int i = 0; i < countOfRays + 2; i++){
-            w1[i] = new float[countOfRays + 3];
-            for(int j = 0; j < countOfRays + 3; j++){
+            w1[i] = new float[7];
+            for(int j = 0; j < 7; j++){
                 w1[i][j] = Random.Range(-1f,1f);
             }
         }
 
-        hiddenLayer = new float[countOfRays + 3];
+        hiddenLayer1 = new float[7];
 
-        w2 = new float[countOfRays + 4][];
-        for (int i = 0; i < countOfRays + 4; i++){
-            w2[i] = new float[2];
-            for(int j = 0; j < 2; j++){
+        w2 = new float[8][];
+        for (int i = 0; i < 8; i++){
+            w2[i] = new float[7];
+            for(int j = 0; j < 7; j++){
                 w2[i][j] = Random.Range(-1f,1f);
             }
         }
+
+        hiddenLayer2 = new float[7];
+
+        w3 = new float[8][];
+        for (int i = 0; i < 8; i++){
+            w3[i] = new float[2];
+            for(int j = 0; j < 2; j++){
+                w3[i][j] = Random.Range(-1f,1f);
+            }
+        }
+
         initialized = true;
     }
 
-    public void FillNN(float[][]a, float[][]b){
+    public void FillNN(float[][]a, float[][]b, float[][]c){
         w1 = new float[countOfRays + 2][];
         for(int i = 0; i < countOfRays + 2; i++){
-            w1[i] = new float[countOfRays + 3];
+            w1[i] = new float[7];
             a[i].CopyTo(w1[i], 0);
         }
 
-        hiddenLayer = new float[countOfRays + 3];
+        hiddenLayer1 = new float[7];
 
-        w2 = new float[countOfRays + 4][];
-        for (int i = 0; i < countOfRays + 4; i++){
-            w2[i] = new float[2];
+        w2 = new float[8][];
+        for (int i = 0; i < 8; i++){
+            w2[i] = new float[7];
             b[i].CopyTo(w2[i], 0);
         }
+
+        hiddenLayer2 = new float[7];
+
+        w3 = new float[8][];
+        for (int i = 0; i < 8; i++){
+            w3[i] = new float[2];
+            c[i].CopyTo(w3[i], 0);
+        }
+
         initialized = true;
     }
 
     Vector2 predict(float[] input){
-        for(int i = 0; i < hiddenLayer.Length; i++){
-            hiddenLayer[i] = 0;
+        for(int i = 0; i < hiddenLayer1.Length; i++){
+            hiddenLayer1[i] = 0;
             for(int j = 0; j < input.Length; j++){
-                hiddenLayer[i] += w1[j][i] * input[j];
+                hiddenLayer1[i] += w1[j][i] * input[j];
             }
-            hiddenLayer[i] = sigmoid(hiddenLayer[i] + w1[w1.Length - 1][i]);
+            hiddenLayer1[i] = sigmoid(hiddenLayer1[i] + w1[w1.Length - 1][i]);
         }
+
+        for(int i = 0; i < hiddenLayer2.Length; i++){
+            hiddenLayer2[i] = 0;
+            for(int j = 0; j < hiddenLayer1.Length; j++){
+                hiddenLayer2[i] += w2[j][i] * hiddenLayer1[j];
+            }
+            hiddenLayer2[i] = sigmoid(hiddenLayer2[i] + w2[w2.Length - 1][i]);
+        }
+
         Vector2 output = Vector2.zero;
 
         for(int i = 0; i < 2; i++){
-            for(int j = 0; j < hiddenLayer.Length; j++){
-                output[i] += w2[j][i]* hiddenLayer[j];
+            for(int j = 0; j < hiddenLayer2.Length; j++){
+                output[i] += w3[j][i]* hiddenLayer2[j];
             }
-            output[i] = sigmoid(output[i] + w2[w2.Length - 1][i]);
+            output[i] = sigmoid(output[i] + w3[w3.Length - 1][i]);
         }
         return output;
     }
@@ -91,7 +122,7 @@ public class CarNN : MonoBehaviour
         string output = "";
         for (int i = 0; i < countOfRays + 2; i++)
         {
-            for (int j = 0; j < countOfRays + 3; j++)
+            for (int j = 0; j < 7; j++)
             {
                 output += w1[i][j].ToString() + " ";
             }
@@ -101,11 +132,22 @@ public class CarNN : MonoBehaviour
         print(output);
         output = "";
 
-        for (int i = 0; i < countOfRays + 4; i++)
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                output += w2[i][j].ToString() + " ";
+            }
+            output += "\n";
+        }
+        print(output);
+        output = "";
+
+        for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 2; j++)
             {
-                output += w2[i][j].ToString() + " ";
+                output += w3[i][j].ToString() + " ";
             }
             output += "\n";
         }
@@ -136,6 +178,10 @@ public class CarNN : MonoBehaviour
         return w2;
     }
 
+    public float[][] getW3(){
+        return w3;
+    }
+
     [ContextMenu("Jopa")]
     public void SaveNN()
     {
@@ -163,6 +209,15 @@ public class CarNN : MonoBehaviour
             }
         }
 
+        foreach (float[] element in w3)
+        {
+            
+            foreach(float num in element)
+            {
+                saveStr += num.ToString() + " ";
+            }
+        }
+
         print(saveStr);
 
         PlayerPrefs.SetString("SlotNN" + slot.ToString(), saveStr);
@@ -171,7 +226,7 @@ public class CarNN : MonoBehaviour
     }
 
     [ContextMenu("Load Jopa")]
-    public void LoadTrack()
+    public void LoadNN()
     {
         int slot = 3;
         string[] loadStr = PlayerPrefs.GetString("SlotNN" + slot.ToString()).Split(' ');
@@ -180,18 +235,29 @@ public class CarNN : MonoBehaviour
 
         w1 = new float[countOfRays + 2][];
         for(int i = 0; i < countOfRays + 2; i++){
-            w1[i] = new float[countOfRays + 3];
-            for(int j = 0; j < countOfRays + 3; j++){
+            w1[i] = new float[7];
+            for(int j = 0; j < 7; j++){
                 w1[i][j] = float.Parse(loadStr[counter]);
                 counter++;
             }
             
         }
 
-        hiddenLayer = new float[countOfRays + 3];
+        hiddenLayer1 = new float[7];
 
-        w2 = new float[countOfRays + 4][];
-        for (int i = 0; i < countOfRays + 4; i++){
+        w2 = new float[8][];
+        for (int i = 0; i < 7; i++){
+            w2[i] = new float[7];
+            for(int j = 0; j < 7; j++){
+                w2[i][j] = float.Parse(loadStr[counter]);
+                counter++;
+            }
+        }
+
+        hiddenLayer2 = new float[7];
+
+        w3 = new float[7][];
+        for (int i = 0; i < 8; i++){
             w2[i] = new float[2];
             for(int j = 0; j < 2; j++){
                 w2[i][j] = float.Parse(loadStr[counter]);

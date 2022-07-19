@@ -6,6 +6,13 @@ public class DistanceFinder : MonoBehaviour
 {
     [Tooltip("Treat that given to car when it collides with check point(i think it must be more then any distance between to chek points)")]
     [SerializeField] float treat;
+
+    [Tooltip("Treat that given to car when it collides with finish")]
+    [SerializeField] float finTreat = 50;
+
+    [Tooltip("Score for second after finish")]
+    [SerializeField] float scoreAfterFin = 15;
+
     [Tooltip("Penalty for crashing in the wall")]
     [SerializeField] float trick;
     [SerializeField] LayerMask wallMask;
@@ -16,6 +23,8 @@ public class DistanceFinder : MonoBehaviour
     private float temp_dist_sqr = 0;
     [SerializeField] private bool valid = true;
     private bool touching = false;
+
+    private bool finished = false;
     
     private void OnTriggerEnter(Collider other){
         switch (other.tag)
@@ -56,13 +65,18 @@ public class DistanceFinder : MonoBehaviour
                 distance += treat;
 
                 break;
+
+            case "Fin":
+                distance += finTreat;
+                finished = true;
+            break;
             
         }
         
     }
 
     void OnCollisionStay(Collision collisionInfo){
-        if(valid)
+        if(valid && !finished)
             if(collisionInfo.gameObject.layer == wallMask)
                 distance -= trick*Time.deltaTime;
     }
@@ -72,17 +86,19 @@ public class DistanceFinder : MonoBehaviour
     }
 
     private void Update(){
-        if(valid){
+        if(valid && !finished){
             float temp = (curPos - transform.position).sqrMagnitude;
             if(temp > temp_dist_sqr){
                 temp_dist_sqr = temp;
             }
         }
-
+        if(finished){
+            distance += scoreAfterFin * Time.deltaTime;
+        }
     }
 
     public float GetDist(){
-        if(valid)
+        if(valid && !finished)
             return distance + Mathf.Sqrt(temp_dist_sqr);
         return distance;
     }

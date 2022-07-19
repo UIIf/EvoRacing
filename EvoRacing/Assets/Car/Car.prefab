@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4e5a3d3f773d64aa77b7d863c57558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 300
+  power: 150
   brakeTorque: 4000
   horInput: 0
   verInput: 0
@@ -694,9 +694,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FOVAngle: 190
   countOfRays: 11
-  lenOfRay: 45
+  lenOfRay: 60
   Eye: {fileID: 7096840503798978474}
-  showRays: 0
+  showRays: 1
   eyeLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -727,6 +727,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treat: 10
+  finTreat: 50
+  scoreAfterFin: 15
   trick: 2
   wallMask:
     serializedVersion: 2

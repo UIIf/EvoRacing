@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class GetTime : MonoBehaviour
 {
@@ -14,6 +15,6 @@ public class GetTime : MonoBehaviour
     [SerializeField] Text txt;
 
     void Update(){
-        txt.text = Before + (Mathf.Round(tm.GetMaxTime())).ToString() + Into + (tm.GetCurrentTime()).ToString("0.00") + After;
+        txt.text = Before + (tm.GetMaxTime()).ToString("0.0") + Into + (tm.GetCurrentTime()).ToString("0.00") + After;
     }
 }

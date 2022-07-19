@@ -85,9 +85,11 @@ public class TrainingManager : MonoBehaviour
         // float[] scores = new float[cars.Length];
         List<Vector2> scores = new List<Vector2>();
         float total_score = 0;
+        float temp;
         // string output = "Scores : ";
         for(int i = 0; i < cars.Length; i++){
-            scores.Add( new Vector2(cars[i].GetComponent<DistanceFinder>().GetDist(), i) );
+            temp = cars[i].GetComponent<DistanceFinder>().GetDist();
+            scores.Add( new Vector2(temp * temp, i) );
             total_score += scores[i][0];
             // output += scores[i][0].ToString() + " ";
         }
@@ -104,11 +106,12 @@ public class TrainingManager : MonoBehaviour
         GameObject[] newCars = new GameObject[carNum];
         int offset = 0;
         float priority, parent, temp_sum;
-        float[][] p1W1, p1W2, p2W1, p2W2;
+        float[][] p1W1, p1W2, p1W3, p2W1, p2W2, p2W3;
         int parent1, parent2;
         
         // Childrens that into
         while(newCarNum/((float)(fromTwoParents)) >= 2){
+
 
             // Find new parents
             parent = Random.Range(0f, total_score);
@@ -142,24 +145,26 @@ public class TrainingManager : MonoBehaviour
             // Current parent weights
             p1W1 = cars[parent1].GetComponent<CarNN>().getW1();
             p1W2 = cars[parent1].GetComponent<CarNN>().getW2();
+            p1W3 = cars[parent1].GetComponent<CarNN>().getW3();
 
             p2W1 = cars[parent2].GetComponent<CarNN>().getW1();
             p2W2 = cars[parent2].GetComponent<CarNN>().getW2();
+            p2W3 = cars[parent1].GetComponent<CarNN>().getW3();
 
             // Mutated childrens
 
             priority = 0.5f;
             for(int i = offset*fromTwoParents; i < (offset + 1)*fromTwoParents - 2; i++){
                 newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-                newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, percentOfMutation, mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, percentOfMutation, mutationValue, priority));
+                newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, percentOfMutation, mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, percentOfMutation, mutationValue, priority), NeuralNetwork.merge_mutate(p1W3, p2W3, percentOfMutation, mutationValue, priority));
             }
             // Mutated parents
             
             newCars[(offset + 1)*fromTwoParents - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[(offset + 1)*fromTwoParents - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2);
+            newCars[(offset + 1)*fromTwoParents - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2, p1W3);
 
             newCars[(offset + 1)*fromTwoParents - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[(offset + 1)*fromTwoParents - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2);
+            newCars[(offset + 1)*fromTwoParents - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2, p2W3);
 
             offset ++;
             newCarNum -= fromTwoParents;
@@ -198,30 +203,37 @@ public class TrainingManager : MonoBehaviour
 
         p1W1 = cars[parent1].GetComponent<CarNN>().getW1();
         p1W2 = cars[parent1].GetComponent<CarNN>().getW2();
+        p1W3 = cars[parent1].GetComponent<CarNN>().getW3();
 
         p2W1 = cars[parent2].GetComponent<CarNN>().getW1();
         p2W2 = cars[parent2].GetComponent<CarNN>().getW2();
+        p2W3 = cars[parent1].GetComponent<CarNN>().getW3();
 
         // Mutated childrens
         priority = 0.5f;
         for(int i = offset*fromTwoParents; i < offset*fromTwoParents  + newCarNum - 2; i++){
             newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
 
-            newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, percentOfMutation, mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, percentOfMutation, mutationValue,priority));
+            newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, percentOfMutation, mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, percentOfMutation, mutationValue,priority), NeuralNetwork.merge_mutate(p1W3, p2W3, percentOfMutation, mutationValue, priority));
         }
         
         // Mutated parents
         
         newCars[offset*fromTwoParents  + newCarNum - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-        newCars[offset*fromTwoParents  + newCarNum - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2);
+        newCars[offset*fromTwoParents  + newCarNum - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2, p1W3);
 
         newCars[offset*fromTwoParents  + newCarNum - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-        newCars[offset*fromTwoParents  + newCarNum - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2);
+        newCars[offset*fromTwoParents  + newCarNum - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2, p2W3);
 
         for(int i = 0; i < cars.Length; i++){
-            Destroy( cars[i]);
+            Destroy(cars[i]);
+        }
+        
+        cars = new GameObject[carNum];
+        for(int i = 0; i < carNum; i++){
             cars[i] = newCars[i];
         }
+        
 
         if(AutoStart){
             startTrainingSession();
@@ -259,15 +271,15 @@ public class TrainingManager : MonoBehaviour
 
     public void IncreaseTime() { 
         if(time < 180)
-            time += 5; 
+            time += 2.5f; 
         RefreshUITime(); 
     }
 
     public void ReduceTime() { 
         if(time > 5)
-            time -= 5; 
+            time -= 2.5f; 
         RefreshUITime(); 
     }
 
-    private void RefreshUITime() { UITime.GetComponent<Text>().text = time.ToString() + " сек."; }
+    private void RefreshUITime() { UITime.GetComponent<Text>().text = time.ToString() + "s"; }
 }
