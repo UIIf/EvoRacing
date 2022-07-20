@@ -693,8 +693,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FOVAngle: 190
-  countOfRays: 11
-  lenOfRay: 15
+  countOfRays: 9
+  lenOfRay: 30
   Eye: {fileID: 7096840503798978474}
   showRays: 1
   eyeLayerMask:
@@ -736,6 +736,8 @@ MonoBehaviour:
   curPos: {x: 0, y: 0, z: 0}
   distance: 0
   valid: 1
+  invalidMaterial: {fileID: 2100000, guid: 8730d58f45c2c904198cc3c37bf96c09, type: 2}
+  carBody: {fileID: 6317837274221730326}
 --- !u!1 &2125985158959992272
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,6 +1261,11 @@ GameObject:
 --- !u!4 &8009525967217847090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1a20b9beb68bd1442bdbc702367ac913, type: 3}
+  m_PrefabInstance: {fileID: 7542742207962549465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6317837274221730326 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4683669308469848369, guid: 1a20b9beb68bd1442bdbc702367ac913, type: 3}
   m_PrefabInstance: {fileID: 7542742207962549465}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &2902650284972456832

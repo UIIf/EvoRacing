@@ -22,10 +22,20 @@ public class DistanceFinder : MonoBehaviour
     [SerializeField] private float distance = 0;
     private float temp_dist_sqr = 0;
     [SerializeField] private bool valid = true;
+    [SerializeField] private Material invalidMaterial;
+    [SerializeField] private MeshRenderer carBody;
     private bool touching = false;
 
     private bool finished = false;
-    
+
+    private void ChangeMat(){
+        carBody.material = invalidMaterial;
+        print("Stop " + distance.ToString());
+    }
+    public void Refresh(){
+        
+    }
+
     private void OnTriggerEnter(Collider other){
         switch (other.tag)
         {
@@ -44,14 +54,14 @@ public class DistanceFinder : MonoBehaviour
 
                 if(curPos == other.transform.position){
                     distance += Mathf.Sqrt(temp_dist_sqr);
-                    print("Stop " + distance.ToString());
+                    ChangeMat();
                     valid = false;
                     break;
                 }
 
                 if(prevPos == other.transform.position){
                     distance -= treat*2 ;
-                    print("Stop " + distance.ToString());
+                    ChangeMat();
                     valid = false;
                 }
 
@@ -77,8 +87,13 @@ public class DistanceFinder : MonoBehaviour
 
     void OnCollisionStay(Collision collisionInfo){
         if(valid && !finished)
-            if(collisionInfo.gameObject.layer == wallMask)
+            if(collisionInfo.gameObject.layer == wallMask){
                 distance -= trick*Time.deltaTime;
+                if(distance < 0){
+                    ChangeMat();
+                    valid = false;
+                }
+            }
     }
 
     private void OnTriggerExit(Collider other){

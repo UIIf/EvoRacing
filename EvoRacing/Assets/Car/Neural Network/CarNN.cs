@@ -183,9 +183,8 @@ public class CarNN : MonoBehaviour
     }
 
     [ContextMenu("Jopa")]
-    public void SaveNN()
+    public void SaveNN(string name)
     {
-        int slot = 3;
         if(!initialized){
             print("Error");
             return;
@@ -218,18 +217,18 @@ public class CarNN : MonoBehaviour
             }
         }
 
-        print(saveStr);
+        // print(saveStr);
 
-        PlayerPrefs.SetString("SlotNN" + slot.ToString(), saveStr);
+        PlayerPrefs.SetString("SlotNN" + name, saveStr);
 
         // saveWindow.SetActive(false);
     }
 
     [ContextMenu("Load Jopa")]
-    public void LoadNN()
+    public void LoadNN(string name)
     {
-        int slot = 3;
-        string[] loadStr = PlayerPrefs.GetString("SlotNN" + slot.ToString()).Split(' ');
+        
+        string[] loadStr = PlayerPrefs.GetString("SlotNN" + name).Split(' ');
 
         int counter = 0;
 
@@ -246,7 +245,7 @@ public class CarNN : MonoBehaviour
         hiddenLayer1 = new float[7];
 
         w2 = new float[8][];
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < 8; i++){
             w2[i] = new float[7];
             for(int j = 0; j < 7; j++){
                 w2[i][j] = float.Parse(loadStr[counter]);
@@ -256,11 +255,11 @@ public class CarNN : MonoBehaviour
 
         hiddenLayer2 = new float[7];
 
-        w3 = new float[7][];
+        w3 = new float[8][];
         for (int i = 0; i < 8; i++){
-            w2[i] = new float[2];
+            w3[i] = new float[2];
             for(int j = 0; j < 2; j++){
-                w2[i][j] = float.Parse(loadStr[counter]);
+                w3[i][j] = float.Parse(loadStr[counter]);
                 counter++;
             }
         }
