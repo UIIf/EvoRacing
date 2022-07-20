@@ -310,21 +310,6 @@ public class TrainingManager : MonoBehaviour
 
     }
 
-
-    public void pauseTrainingSession()
-    {
-        if (isStartedTraining && !pauseCars)
-        {
-            foreach (GameObject car in cars)
-            {
-                car.GetComponent<CarScript>().run = false;
-            }
-            pauseCars = true;
-            // isStartedTraining  = true;
-            // curTime = 0;
-        }
-    }
-
     public void changeAutoStart()
     {
         AutoStart = !AutoStart;
@@ -333,16 +318,25 @@ public class TrainingManager : MonoBehaviour
     [ContextMenu("CreateTable")]
     public void CreateTable()
     {
-        pauseTrainingSession();
-        ScrollView.SetActive(true);
-        Transform content = ScrollView.transform.GetChild(0).transform.GetChild(0);
-        cars = cars.OrderBy((car) => car.GetComponent<DistanceFinder>().GetDist()).Reverse<GameObject>().ToArray<GameObject>();
-        foreach (GameObject car in cars)
-        {
-            GameObject temp = Instantiate(carItem, content);
-            temp.transform.GetChild(1).GetComponent<Text>().text = "Score: " + car.GetComponent<DistanceFinder>().GetDist().ToString("0,000");
-            temp.transform.parent = content;
+        if(ScrollView.active){
+            ScrollView.SetActive(false);
+            Transform temp = ScrollView.transform.GetChild(0).transform;
+            for(int i = 0; i < temp.childCount; i ++){
+                Destroy(temp.GetChild(0));
+            }
         }
+        else{
+            ScrollView.SetActive(true);
+            Transform content = ScrollView.transform.GetChild(0).transform.GetChild(0);
+            cars = cars.OrderBy((car) => car.GetComponent<DistanceFinder>().GetDist()).Reverse<GameObject>().ToArray<GameObject>();
+            foreach (GameObject car in cars)
+            {
+                GameObject temp = Instantiate(carItem, content);
+                temp.transform.GetChild(1).GetComponent<Text>().text = "Score: " + car.GetComponent<DistanceFinder>().GetDist().ToString("0,000");
+                temp.transform.parent = content;
+            }
+        }
+        
     }
 
     public void Refresh(){
@@ -480,6 +474,14 @@ public class TrainingManager : MonoBehaviour
         if (timeScale > 1)
             timeScale -= 1f;
         RefreshUITimeScale();
+    }
+
+    public void changeDefaultSlot(string slot){defaultSlot = slot;}
+    public void ResetCarPosition(){
+        foreach(GameObject car in cars){
+            car.transform.position = carPrefab.transform.position;
+            car.transform.rotation = carPrefab.transform.rotation;
+        }
     }
 
     private void RefreshUITimeScale() { UITimeScale.GetComponent<Text>().text = timeScale.ToString() + "x"; }
