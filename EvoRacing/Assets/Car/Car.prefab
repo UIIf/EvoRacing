@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4e5a3d3f773d64aa77b7d863c57558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 300
+  power: 200
   brakeTorque: 4000
   horInput: 0
   verInput: 0

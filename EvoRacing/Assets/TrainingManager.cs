@@ -14,6 +14,7 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] GameObject ScrollView;
     [SerializeField] GameObject carItem;
     [SerializeField] GameObject UITime;
+    [SerializeField] GameObject UITimeScale;
     private Vector3 spawnPoint;
 
     [Min(1)]
@@ -449,6 +450,7 @@ public class TrainingManager : MonoBehaviour
 
     }
 
+    //UI Time change
     public void IncreaseTime()
     {
         if (time < 180)
@@ -464,4 +466,21 @@ public class TrainingManager : MonoBehaviour
     }
 
     private void RefreshUITime() { UITime.GetComponent<Text>().text = time.ToString() + "s"; }
+
+    //UI TimeScale change
+    public void IncreaseTimeScale()
+    {
+        if (timeScale < 5)
+            timeScale += 1f;
+        RefreshUITimeScale();
+    }
+
+    public void ReduceTimeScale()
+    {
+        if (timeScale > 1)
+            timeScale -= 1f;
+        RefreshUITimeScale();
+    }
+
+    private void RefreshUITimeScale() { UITimeScale.GetComponent<Text>().text = timeScale.ToString() + "x"; }
 }
