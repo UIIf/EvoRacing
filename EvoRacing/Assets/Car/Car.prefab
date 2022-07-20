@@ -696,7 +696,7 @@ MonoBehaviour:
   countOfRays: 9
   lenOfRay: 30
   Eye: {fileID: 7096840503798978474}
-  showRays: 1
+  showRays: 0
   eyeLayerMask:
     serializedVersion: 2
     m_Bits: 64

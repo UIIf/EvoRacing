@@ -36,8 +36,9 @@ public class TrainingManager : MonoBehaviour
 
     [Range(1f, 5f)]
     [SerializeField] float timeScale = 1f;
+    [SerializeField] string defaultSlot = "quick";
 
-    private bool pauseCars = false;
+    private bool pauseCars = true;
 
     public float GetMaxTime()
     {
@@ -55,7 +56,16 @@ public class TrainingManager : MonoBehaviour
         for (int i = 0; i < carNum; i++)
         {
             cars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            cars[i].GetComponent<CarNN>().InitialiseNN();
+
+        }
+        string temp_loaded = PlayerPrefs.GetString("SlotNN" + defaultSlot);
+        if(temp_loaded == ""){
+            Refresh();
+        }
+        else{
+            print("Good load, bro");
+            print(temp_loaded);
+            LoadNeurons(defaultSlot);
         }
     }
 
@@ -76,7 +86,7 @@ public class TrainingManager : MonoBehaviour
             total_score += scores[i][0];
             // output += scores[i][0].ToString() + " ";
         }
-        
+
         // print(output);
 
         //Shuffle
@@ -334,35 +344,48 @@ public class TrainingManager : MonoBehaviour
         }
     }
 
-    void AutoSave(){
+    public void Refresh(){
+        if(!isStartedTraining){
+            for (int i = 0; i < carNum; i++)
+            {
+                cars[i].GetComponent<CarNN>().InitialiseNN();
+            }
+        }
+    }
+    void AutoSave(string slot)
+    {
         float maxScore = cars[0].GetComponent<DistanceFinder>().GetDist();
         int ind = 0;
         float temp;
         for (int i = 1; i < cars.Length; i++)
         {
             temp = cars[i].GetComponent<DistanceFinder>().GetDist();
-            if(temp > maxScore){
+            if (temp > maxScore)
+            {
                 maxScore = temp;
                 ind = i;
             }
         }
-        cars[ind].GetComponent<CarNN>().SaveNN("quick");
+        cars[ind].GetComponent<CarNN>().SaveNN(slot);
     }
 
-    public void LoadNeurons(){
-        if(!isStartedTraining){
-            
+    public void LoadNeurons(string slot)
+    {
+        if (!isStartedTraining)
+        {
+
             CarNN tempNN = cars[0].GetComponent<CarNN>();
-            tempNN.LoadNN("quick");
+            tempNN.LoadNN(slot);
             float[][] w1 = tempNN.getW1();
             float[][] w2 = tempNN.getW2();
             float[][] w3 = tempNN.getW3();
 
-            for(int i = 1; i < cars.Length; i++){
-                cars[i].GetComponent<CarNN>().FillNN(w1, w2, w3);
+            for (int i = 1; i < cars.Length; i++)
+            {
+                cars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(w1, percentOfMutation, mutationValue), NeuralNetwork.mutate(w2, percentOfMutation, mutationValue), NeuralNetwork.mutate(w3, percentOfMutation, mutationValue));
             }
         }
-        
+
     }
     void Update()
     {
@@ -375,7 +398,7 @@ public class TrainingManager : MonoBehaviour
             {
                 if (isStartedTraining)
                 {
-                    AutoSave();
+                    AutoSave(defaultSlot);
                     isStartedTraining = false;
                     curTime = time;
                     Time.timeScale = 0;
@@ -399,7 +422,8 @@ public class TrainingManager : MonoBehaviour
     [ContextMenu("Start")]
     public void startTrainingSession()
     {
-        if(pauseCars){
+        if (pauseCars)
+        {
             foreach (GameObject car in cars)
             {
                 car.GetComponent<CarScript>().run = true;
@@ -410,6 +434,7 @@ public class TrainingManager : MonoBehaviour
         }
         if (!isStartedTraining)
         {
+            print("OH NO, CRINGE");
             Training();
             foreach (GameObject car in cars)
             {
@@ -420,8 +445,8 @@ public class TrainingManager : MonoBehaviour
             curTime = 0;
             Time.timeScale = timeScale;
         }
-        
-        
+
+
     }
 
     public void IncreaseTime()

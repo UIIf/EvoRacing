@@ -53,7 +53,7 @@ public class DistanceFinder : MonoBehaviour
                 }
 
                 if(curPos == other.transform.position){
-                    distance += Mathf.Sqrt(temp_dist_sqr);
+                    
                     ChangeMat();
                     valid = false;
                     break;
@@ -101,12 +101,6 @@ public class DistanceFinder : MonoBehaviour
     }
 
     private void Update(){
-        if(valid && !finished){
-            float temp = (curPos - transform.position).sqrMagnitude;
-            if(temp > temp_dist_sqr){
-                temp_dist_sqr = temp;
-            }
-        }
         if(finished){
             distance += scoreAfterFin * Time.deltaTime;
         }
@@ -114,7 +108,7 @@ public class DistanceFinder : MonoBehaviour
 
     public float GetDist(){
         if(valid && !finished)
-            return distance + Mathf.Sqrt(temp_dist_sqr);
+            return distance + (curPos - transform.position).magnitude;
         return distance;
     }
 }
