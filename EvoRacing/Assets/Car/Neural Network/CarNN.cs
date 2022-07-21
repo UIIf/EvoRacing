@@ -265,7 +265,6 @@ public class CarNN : MonoBehaviour
         }
 
         initialized = true;
-        print("NICEEEEEEEE");
         // loadWindow.SetActive(false);
     }
 }

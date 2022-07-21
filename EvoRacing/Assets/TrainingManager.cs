@@ -41,14 +41,7 @@ public class TrainingManager : MonoBehaviour
 
     private bool pauseCars = true;
 
-    public float GetMaxTime()
-    {
-        return time;
-    }
-    public float GetCurrentTime()
-    {
-        return curTime;
-    }
+    
     void Start()
     {
         isStartedTraining = false;
@@ -64,12 +57,41 @@ public class TrainingManager : MonoBehaviour
             Refresh();
         }
         else{
-            print("Good load, bro");
-            print(temp_loaded);
             LoadNeurons(defaultSlot);
         }
     }
 
+    void Update()
+    {
+        // Time.timeScale = timeScale;
+
+        if (isStartedTraining && !pauseCars)
+        {
+
+            if (curTime > time)
+            {
+                if (isStartedTraining)
+                {
+                    AutoSave(defaultSlot);
+                    isStartedTraining = false;
+                    curTime = time;
+                    Time.timeScale = 0;
+                }
+
+                if (AutoStart)
+                    startTrainingSession();
+            }
+            else
+            {
+                curTime += Time.deltaTime;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
 
     void Training()
     {
@@ -310,6 +332,23 @@ public class TrainingManager : MonoBehaviour
 
     }
 
+    void AutoSave(string slot)
+    {
+        float maxScore = cars[0].GetComponent<DistanceFinder>().GetDist();
+        int ind = 0;
+        float temp;
+        for (int i = 1; i < cars.Length; i++)
+        {
+            temp = cars[i].GetComponent<DistanceFinder>().GetDist();
+            if (temp > maxScore)
+            {
+                maxScore = temp;
+                ind = i;
+            }
+        }
+        cars[ind].GetComponent<CarNN>().SaveNN(slot);
+    }
+
     public void changeAutoStart()
     {
         AutoStart = !AutoStart;
@@ -318,7 +357,7 @@ public class TrainingManager : MonoBehaviour
     [ContextMenu("CreateTable")]
     public void CreateTable()
     {
-        if(ScrollView.active){
+        if(ScrollView.activeSelf){
             ScrollView.SetActive(false);
             Transform temp = ScrollView.transform.GetChild(0).transform;
             for(int i = 0; i < temp.childCount; i ++){
@@ -347,23 +386,7 @@ public class TrainingManager : MonoBehaviour
             }
         }
     }
-    void AutoSave(string slot)
-    {
-        float maxScore = cars[0].GetComponent<DistanceFinder>().GetDist();
-        int ind = 0;
-        float temp;
-        for (int i = 1; i < cars.Length; i++)
-        {
-            temp = cars[i].GetComponent<DistanceFinder>().GetDist();
-            if (temp > maxScore)
-            {
-                maxScore = temp;
-                ind = i;
-            }
-        }
-        cars[ind].GetComponent<CarNN>().SaveNN(slot);
-    }
-
+    
     public void LoadNeurons(string slot)
     {
         if (!isStartedTraining)
@@ -382,38 +405,7 @@ public class TrainingManager : MonoBehaviour
         }
 
     }
-    void Update()
-    {
-        // Time.timeScale = timeScale;
-
-        if (isStartedTraining && !pauseCars)
-        {
-
-            if (curTime > time)
-            {
-                if (isStartedTraining)
-                {
-                    AutoSave(defaultSlot);
-                    isStartedTraining = false;
-                    curTime = time;
-                    Time.timeScale = 0;
-                }
-
-                if (AutoStart)
-                    startTrainingSession();
-            }
-            else
-            {
-                curTime += Time.deltaTime;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }
-
+    
     [ContextMenu("Start")]
     public void startTrainingSession()
     {
@@ -476,6 +468,8 @@ public class TrainingManager : MonoBehaviour
         RefreshUITimeScale();
     }
 
+    private void RefreshUITimeScale() { UITimeScale.GetComponent<Text>().text = timeScale.ToString() + "x"; }
+
     public void changeDefaultSlot(string slot){defaultSlot = slot;}
     public void ResetCarPosition(){
         foreach(GameObject car in cars){
@@ -484,5 +478,14 @@ public class TrainingManager : MonoBehaviour
         }
     }
 
-    private void RefreshUITimeScale() { UITimeScale.GetComponent<Text>().text = timeScale.ToString() + "x"; }
+    public float GetMaxTime()
+    {
+        return time;
+    }
+    public float GetCurrentTime()
+    {
+        return curTime;
+    }
+   
+    
 }
