@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - CamMoveScript
     - CarNN
     - CarRayInfo
     - CarScript
@@ -29,6 +30,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
     - UnityEngine.UI.Text
+    - UnityEngine.UI.Toggle
     - UnityEngine.UI.VerticalLayoutGroup
   sceneClasses:
     Assets/Scenes/Garage.unity:
@@ -65,29 +67,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1436}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1560}
     - Class: 114
-      Script: {instanceID: 1532}
+      Script: {instanceID: 1612}
     - Class: 114
-      Script: {instanceID: 2138}
+      Script: {instanceID: 2218}
     - Class: 114
-      Script: {instanceID: 2302}
+      Script: {instanceID: 2382}
     - Class: 114
-      Script: {instanceID: 2414}
+      Script: {instanceID: 2494}
     - Class: 114
-      Script: {instanceID: 2574}
+      Script: {instanceID: 2654}
     - Class: 114
-      Script: {instanceID: 2582}
+      Script: {instanceID: 2662}
     - Class: 114
-      Script: {instanceID: 2586}
+      Script: {instanceID: 2666}
     - Class: 114
-      Script: {instanceID: 2768}
+      Script: {instanceID: 2848}
     - Class: 114
-      Script: {instanceID: 2854}
+      Script: {instanceID: 2934}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 3182}
     - Class: 114
-      Script: {instanceID: 4096}
+      Script: {instanceID: 4176}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -144,29 +146,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1436}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1560}
     - Class: 114
-      Script: {instanceID: 1532}
+      Script: {instanceID: 1612}
     - Class: 114
-      Script: {instanceID: 2138}
+      Script: {instanceID: 2218}
     - Class: 114
-      Script: {instanceID: 2302}
+      Script: {instanceID: 2382}
     - Class: 114
-      Script: {instanceID: 2414}
+      Script: {instanceID: 2494}
     - Class: 114
-      Script: {instanceID: 2574}
+      Script: {instanceID: 2654}
     - Class: 114
-      Script: {instanceID: 2582}
+      Script: {instanceID: 2662}
     - Class: 114
-      Script: {instanceID: 2586}
+      Script: {instanceID: 2666}
     - Class: 114
-      Script: {instanceID: 2768}
+      Script: {instanceID: 2848}
     - Class: 114
-      Script: {instanceID: 2854}
+      Script: {instanceID: 2934}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 3182}
     - Class: 114
-      Script: {instanceID: 4096}
+      Script: {instanceID: 4176}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -221,31 +223,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1436}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1560}
     - Class: 114
-      Script: {instanceID: 1532}
+      Script: {instanceID: 1612}
     - Class: 114
-      Script: {instanceID: 1644}
+      Script: {instanceID: 1724}
     - Class: 114
-      Script: {instanceID: 2292}
+      Script: {instanceID: 2372}
     - Class: 114
-      Script: {instanceID: 2302}
+      Script: {instanceID: 2382}
     - Class: 114
-      Script: {instanceID: 2414}
+      Script: {instanceID: 2494}
     - Class: 114
-      Script: {instanceID: 2582}
+      Script: {instanceID: 2662}
     - Class: 114
-      Script: {instanceID: 2768}
+      Script: {instanceID: 2848}
     - Class: 114
-      Script: {instanceID: 2778}
+      Script: {instanceID: 2858}
     - Class: 114
-      Script: {instanceID: 2854}
+      Script: {instanceID: 2934}
     - Class: 114
-      Script: {instanceID: 3008}
+      Script: {instanceID: 3088}
     - Class: 114
-      Script: {instanceID: 3578}
+      Script: {instanceID: 3658}
     - Class: 114
-      Script: {instanceID: 3710}
+      Script: {instanceID: 3790}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -296,45 +298,49 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1436}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1560}
     - Class: 114
-      Script: {instanceID: 1532}
+      Script: {instanceID: 1612}
     - Class: 114
-      Script: {instanceID: 2138}
+      Script: {instanceID: 1656}
     - Class: 114
-      Script: {instanceID: 2292}
+      Script: {instanceID: 2218}
     - Class: 114
-      Script: {instanceID: 2302}
+      Script: {instanceID: 2372}
     - Class: 114
-      Script: {instanceID: 2414}
+      Script: {instanceID: 2382}
     - Class: 114
-      Script: {instanceID: 2574}
+      Script: {instanceID: 2494}
     - Class: 114
-      Script: {instanceID: 2582}
+      Script: {instanceID: 2654}
     - Class: 114
-      Script: {instanceID: 2586}
+      Script: {instanceID: 2662}
     - Class: 114
-      Script: {instanceID: 2768}
+      Script: {instanceID: 2666}
     - Class: 114
-      Script: {instanceID: 2778}
+      Script: {instanceID: 2848}
     - Class: 114
-      Script: {instanceID: 2854}
+      Script: {instanceID: 2858}
     - Class: 114
-      Script: {instanceID: 3008}
+      Script: {instanceID: 2934}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 3088}
     - Class: 114
-      Script: {instanceID: 3114}
+      Script: {instanceID: 3182}
     - Class: 114
-      Script: {instanceID: 3350}
+      Script: {instanceID: 3194}
     - Class: 114
-      Script: {instanceID: 3416}
+      Script: {instanceID: 3430}
     - Class: 114
-      Script: {instanceID: 3578}
+      Script: {instanceID: 3496}
     - Class: 114
-      Script: {instanceID: 3710}
+      Script: {instanceID: 3658}
     - Class: 114
-      Script: {instanceID: 4096}
+      Script: {instanceID: 3790}
+    - Class: 114
+      Script: {instanceID: 4176}
+    - Class: 114
+      Script: {instanceID: 4300}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -728,7 +734,7 @@ ScriptsOnlyBuild:
     className: Gates
   - hash:
       serializedVersion: 2
-      Hash: 8e0920e7c14f9715f70f272bc1f8f707
+      Hash: 9acfed3036dc89257bb212718f3e75a3
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TrainingManager
@@ -818,7 +824,7 @@ ScriptsOnlyBuild:
     className: TMP_SpriteAsset
   - hash:
       serializedVersion: 2
-      Hash: 6d285ec012bd54695afb9833ae9ea512
+      Hash: 4b912260f3c9b258d0dd597e5c0a1f6e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DistanceFinder
@@ -828,6 +834,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_ScrollbarEventHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 0fac9aadd1d00244c412c47dbfef2fb5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CamMoveScript
   - hash:
       serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
@@ -864,4 +876,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Garage.unity
   - Assets/Scenes/TrainingField.unity
   - Assets/Scenes/TrackEditor.unity
-  playerPath: C:/evoracing_1/EVO.apk
+  playerPath: C:/evoracing_1/EVO_2.apk
