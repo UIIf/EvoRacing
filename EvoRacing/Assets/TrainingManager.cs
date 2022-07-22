@@ -368,6 +368,8 @@ public class TrainingManager : MonoBehaviour
     
     public void startTrainingSession()
     {
+        Time.timeScale = timeScale;
+
         if (pauseCars)
         {
             foreach (GameObject car in cars)
@@ -378,8 +380,7 @@ public class TrainingManager : MonoBehaviour
             isStartedTraining = true;
         }
         if (!isStartedTraining)
-        {
-            Time.timeScale = timeScale;
+        {         
             Training();
             foreach (GameObject car in cars)
             {
@@ -389,8 +390,6 @@ public class TrainingManager : MonoBehaviour
             pauseCars = false;
             curTime = 0;
         }
-
-
     }
 
     //UI Time change
@@ -471,6 +470,7 @@ public class TrainingManager : MonoBehaviour
 
         if (saveText.text != "" && saveText.text.Length < 10)
         {
+            saveText.text.Replace(' ', '_');
 
             SaveNN(saveText.text);
             SaveSlotName(saveText.text);
