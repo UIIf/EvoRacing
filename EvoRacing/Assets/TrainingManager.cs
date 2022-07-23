@@ -415,7 +415,8 @@ public class TrainingManager : MonoBehaviour
         if (timeScale < 5)
             timeScale += 1f;
         RefreshUITimeScale();
-        Time.timeScale = timeScale;
+        if(isStartedTraining)
+            Time.timeScale = timeScale;
     }
 
     public void ReduceTimeScale()
@@ -423,7 +424,8 @@ public class TrainingManager : MonoBehaviour
         if (timeScale > 1)
             timeScale -= 1f;
         RefreshUITimeScale();
-        Time.timeScale = timeScale;
+        if(isStartedTraining)
+            Time.timeScale = timeScale;
     }
 
     private void RefreshUITimeScale() { UITimeScale.GetComponent<Text>().text = timeScale.ToString() + "x"; }

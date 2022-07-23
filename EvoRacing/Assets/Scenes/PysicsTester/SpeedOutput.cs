@@ -16,6 +16,6 @@ public class SpeedOutput : MonoBehaviour
 
     void Update()
     {
-        text.text = carRb.velocity.ToString();
+        text.text = carRb.velocity.magnitude.ToString();
     }
 }

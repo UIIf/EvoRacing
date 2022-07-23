@@ -26,9 +26,14 @@ public class WheelScript : MonoBehaviour
 
     public void Accelerate(float powerInput, float brakeTorque)
     {
-        if (powered && powerInput > 0) wcol.motorTorque = powerInput;
-        else if (powerInput < 0) wcol.brakeTorque = -brakeTorque;
-        else wcol.brakeTorque = 0;
+        if(powerInput > 0)
+        {
+            wcol.brakeTorque = 0;
+            if(powered) wcol.motorTorque = powerInput;
+        }
+        else
+            wcol.brakeTorque = -brakeTorque + 0.001f;
+
     }
 
     public void UpdatePosition()
