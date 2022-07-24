@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NNet", menuName = "NN")]
-public class NeuralNetwork: ScriptableObject
+public class NeuralNetwork
 {
-    public int rayCount;
     public static float[][] merge_mutate(float[][] a, float[][] b, float presentOfMutation = 0.01f, float mutateRange = 0.01f, float parentPriority = 0.5f){
         if(a.Length != b.Length || a[0].Length != b[0].Length){
             return null;

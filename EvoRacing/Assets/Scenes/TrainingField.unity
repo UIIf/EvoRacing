@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5145,7 +5145,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1218741590}
+  - component: {fileID: 1218741593}
   - component: {fileID: 1218741591}
+  - component: {fileID: 1218741592}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -5179,7 +5181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb10a5af728d97c4fafa8281943df4cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cars: []
+  carManag: {fileID: 1218741592}
+  trSettings: {fileID: 1218741593}
   start: {fileID: 530964190}
   carPrefab: {fileID: 2125985158654404085, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
   ScrollView: {fileID: 937445636}
@@ -5188,16 +5191,48 @@ MonoBehaviour:
   UITimeScale: {fileID: 1349615448}
   saveWindow: {fileID: 140333087}
   loadWindow: {fileID: 200712316}
-  carNum: 60
-  fromTwoParents: 10
-  percentOfMutation: 0.1
-  mutationValue: 1
-  time: 10
   curTime: 0
   isStartedTraining: 0
   AutoStart: 1
   timeScale: 1
   defaultSlot: main
+--- !u!114 &1218741592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218741589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0cc90cc9a40ec478fb157dc771faf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1218741593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218741589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d87f72e8d8f99a4ea380a4088af4ea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _carNum: 60
+  minCarNum: 10
+  maxCarNum: 200
+  _from2Parents: 10
+  minFrom2Parents: 3
+  maxFrom2Parents: 200
+  _percentOfMutation: 0.1
+  _mutationValue: 1
+  minMutationValue: 0
+  maxMutationValue: 10
+  _time: 10
+  minTime: 2.5
+  maxTime: 300
 --- !u!1 &1250077034
 GameObject:
   m_ObjectHideFlags: 0
@@ -5523,6 +5558,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: 980b620aedfd2744abcf6caf3c1f9ca8, type: 2}
+        m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

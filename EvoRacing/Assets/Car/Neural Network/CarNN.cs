@@ -225,10 +225,12 @@ public class CarNN : MonoBehaviour
     }
 
     [ContextMenu("Load Jopa")]
-    public void LoadNN(string name)
+    public bool LoadNN(string name)
     {
+        string temp_loaded = PlayerPrefs.GetString("SlotNN" + name);
+        if(temp_loaded == "") {return false;}
+        string[] loadStr = temp_loaded.Split(' ');
         
-        string[] loadStr = PlayerPrefs.GetString("SlotNN" + name).Split(' ');
 
         int counter = 0;
 
@@ -265,6 +267,7 @@ public class CarNN : MonoBehaviour
         }
 
         initialized = true;
+        return true;
         // loadWindow.SetActive(false);
     }
 }
