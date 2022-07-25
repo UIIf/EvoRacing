@@ -6,15 +6,29 @@ using System;
 
 public class GetTime : MonoBehaviour
 {
-    [SerializeField] string Before;
-    [SerializeField] string Into;
-    [SerializeField] string After;
+    [Header("Decorator of \"Time/Current Time\"")]
+    [SerializeField] string doubleTBefore;
+    [SerializeField] string doubleTInto;
+    [SerializeField] string doubleTAfter;
+     [Header("Decorator of \"Time\"")]
+    [SerializeField] string oneTBefore;
+    [SerializeField] string oneTAfter;
     [Min(0)]
     [SerializeField] int r;
     [SerializeField] TrainingManager tm;
+    [SerializeField] TrainingSettings ts;
+    [Header("Main time")]
     [SerializeField] Text txt;
+    [Header("Max time")]
+    [SerializeField] List<Text> maxText;
 
     void Update(){
-        txt.text = Before + (tm.GetMaxTime()).ToString("0.0") + Into + (tm.GetCurrentTime()).ToString("0.00") + After;
+        txt.text = doubleTBefore + (ts.time).ToString("0.0") + doubleTInto + (tm.GetCurrentTime()).ToString("0.00") + doubleTAfter;
+    }
+
+    public void SetMaxTimeText(){
+        foreach(Text txt in maxText){
+            txt.text = oneTBefore + (ts.time).ToString() + oneTAfter;
+        }
     }
 }

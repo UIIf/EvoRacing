@@ -39,6 +39,7 @@
      <Compile Include="Assets\TransitionManager.cs" />
      <Compile Include="Assets\Car\Neural Network\NeuralNetwork.cs" />
      <Compile Include="Assets\Car\Neural Network\CarRayInfo.cs" />
+     <Compile Include="Assets\Managers\Traning\TrainingSettings.cs" />
      <Compile Include="Assets\Map\TrackEditorManager.cs" />
      <Compile Include="Assets\Car\Neural Network\CarNN.cs" />
      <Compile Include="Assets\Car\WheelScript.cs" />
@@ -46,12 +47,15 @@
      <Compile Include="Assets\UIElements\GetTime.cs" />
      <Compile Include="Assets\Scenes\PysicsTester\TimeOutput.cs" />
      <Compile Include="Assets\Scenes\PysicsTester\Gates.cs" />
+     <Compile Include="Assets\Managers\CarManager.cs" />
      <Compile Include="Assets\Managers\Traning\TrainingManager.cs" />
      <Compile Include="Assets\Car\Neural Network\DistanceFinder.cs" />
      <Compile Include="Assets\CamMoveScript.cs" />
      <Compile Include="Assets\Scenes\PysicsTester\SpeedOutput.cs" />
-     <Compile Include="Assets\Managers\CarManager.cs" />
-     <Compile Include="Assets\Managers\Traning\TrainingSettings.cs" />
+     <Compile Include="Assets\Car\Neural Network\DFSettings.cs" />
+     <Compile Include="Assets\Managers\MainManager.cs" />
+     <Compile Include="Assets\UIElements\UIShowMainManager.cs" />
+     <Compile Include="Assets\UIElements\UIShowTrainingSettings.cs" />
     <Reference Include="UnityEngine">
         <HintPath>S:\Tools\UnityHub\2020.3.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

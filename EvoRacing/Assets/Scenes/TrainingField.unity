@@ -346,7 +346,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &103659033
 GameObject:
@@ -1370,7 +1370,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &488439837
 GameObject:
@@ -1455,9 +1455,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218741591}
-        m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
-        m_MethodName: IncreaseTimeScale
+      - m_Target: {fileID: 1398765334}
+        m_TargetAssemblyTypeName: MainManager, Assembly-CSharp
+        m_MethodName: ChangeTimeScale
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.25
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1398765333}
+        m_TargetAssemblyTypeName: UIShowMainManager, Assembly-CSharp
+        m_MethodName: UpdateTSText
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1465,7 +1477,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &488439840
 MonoBehaviour:
@@ -1517,6 +1529,7 @@ GameObject:
   - component: {fileID: 495867829}
   - component: {fileID: 495867828}
   - component: {fileID: 495867831}
+  - component: {fileID: 495867832}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1587,7 +1600,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 88.212, y: 0, z: 0}
 --- !u!114 &495867831
 MonoBehaviour:
@@ -1604,6 +1617,21 @@ MonoBehaviour:
   cam: {fileID: 495867829}
   count: 0
   isActive: 1
+--- !u!114 &495867832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495867827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2299b214f21edf541a6ac65030f28773, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timeScale: 1
+  minTimeScale: 0.25
+  maxTimeScale: 4
 --- !u!1 &509166537
 GameObject:
   m_ObjectHideFlags: 0
@@ -5145,6 +5173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1218741590}
+  - component: {fileID: 1218741594}
   - component: {fileID: 1218741593}
   - component: {fileID: 1218741591}
   - component: {fileID: 1218741592}
@@ -5167,7 +5196,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1218741591
 MonoBehaviour:
@@ -5183,18 +5212,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carManag: {fileID: 1218741592}
   trSettings: {fileID: 1218741593}
+  dFSettings: {fileID: 1218741594}
+  MM: {fileID: 1398765334}
   start: {fileID: 530964190}
   carPrefab: {fileID: 2125985158654404085, guid: f67fb15923b4aac4ba5e54233d5311b4, type: 3}
   ScrollView: {fileID: 937445636}
   carItem: {fileID: 1587754691064613840, guid: d666207a4b7050546af36a1b29a12694, type: 3}
   UITime: {fileID: 405678119}
-  UITimeScale: {fileID: 1349615448}
   saveWindow: {fileID: 140333087}
   loadWindow: {fileID: 200712316}
   curTime: 0
   isStartedTraining: 0
   AutoStart: 1
-  timeScale: 1
   defaultSlot: main
 --- !u!114 &1218741592
 MonoBehaviour:
@@ -5233,6 +5262,30 @@ MonoBehaviour:
   _time: 10
   minTime: 2.5
   maxTime: 300
+--- !u!114 &1218741594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218741589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb339c5beac70f44b2b416b8d489f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _treatFCheckPoint: 20
+  minTreatFCheckPoint: -2000
+  maxTreatFCheckPoint: 2000
+  _finTreat: 50
+  minFinTreat: -2000
+  maxFinTreat: 2000
+  _scoreAfterFin: 15
+  minScoreAfterFin: -2000
+  maxScoreAfterFin: 2000
+  _wallTrick: 1000
+  minWallTrick: -2000
+  maxWallTrick: 2000
 --- !u!1 &1250077034
 GameObject:
   m_ObjectHideFlags: 0
@@ -5308,7 +5361,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1275718321
 GameObject:
@@ -5468,6 +5521,70 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1398765332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398765335}
+  - component: {fileID: 1398765334}
+  - component: {fileID: 1398765333}
+  m_Layer: 0
+  m_Name: MainManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1398765333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398765332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f0ae42668b9d44888d726e54c2407e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MM: {fileID: 1398765334}
+  TStext:
+  - {fileID: 1349615449}
+  TSBefore: 
+  TSAfter: x
+--- !u!114 &1398765334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398765332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2299b214f21edf541a6ac65030f28773, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timeScale: 1
+  minTimeScale: 0.25
+  maxTimeScale: 4
+--- !u!4 &1398765335
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398765332}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1630.0375, y: 31.769003, z: 121.25985}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1429942619
 GameObject:
   m_ObjectHideFlags: 0
@@ -5551,25 +5668,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218741591}
-        m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
-        m_MethodName: IncreaseTime
-        m_Mode: 1
+      - m_Target: {fileID: 1218741593}
+        m_TargetAssemblyTypeName: TrainingSettings, Assembly-CSharp
+        m_MethodName: ChangeTime
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 2.5
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 980b620aedfd2744abcf6caf3c1f9ca8, type: 2}
-        m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1533014172}
+        m_TargetAssemblyTypeName: GetTime, Assembly-CSharp
+        m_MethodName: SetMaxTimeText
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5778,7 +5895,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1218741591}
         m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
-        m_MethodName: Refresh
+        m_MethodName: RefreshNN
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6088,12 +6205,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a0d63d6817c67e4d8966687949abd1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Before: 'Time:'
-  Into: ' / '
-  After: 
+  doubleTBefore: 
+  doubleTInto: /
+  doubleTAfter: 
+  oneTBefore: 
+  oneTAfter: s
   r: 2
   tm: {fileID: 1218741591}
+  ts: {fileID: 1218741593}
   txt: {fileID: 1533014173}
+  maxText:
+  - {fileID: 405678121}
 --- !u!114 &1533014173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6219,9 +6341,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218741591}
-        m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
-        m_MethodName: ReduceTimeScale
+      - m_Target: {fileID: 1398765334}
+        m_TargetAssemblyTypeName: MainManager, Assembly-CSharp
+        m_MethodName: ChangeTimeScale
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -0.25
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1398765333}
+        m_TargetAssemblyTypeName: UIShowMainManager, Assembly-CSharp
+        m_MethodName: UpdateTSText
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7060,9 +7194,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218741591}
-        m_TargetAssemblyTypeName: TrainingManager, Assembly-CSharp
-        m_MethodName: ReduceTime
+      - m_Target: {fileID: 1218741593}
+        m_TargetAssemblyTypeName: TrainingSettings, Assembly-CSharp
+        m_MethodName: ChangeTime
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -2.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1533014172}
+        m_TargetAssemblyTypeName: GetTime, Assembly-CSharp
+        m_MethodName: SetMaxTimeText
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8137,7 +8283,7 @@ RectTransform:
   - {fileID: 628347093}
   - {fileID: 202038153}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

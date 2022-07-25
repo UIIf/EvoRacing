@@ -4,23 +4,12 @@ using UnityEngine;
 
 public class DistanceFinder : MonoBehaviour
 {
-    [Tooltip("Treat that given to car when it collides with check point(i think it must be more then any distance between to chek points)")]
-    [SerializeField] float treat;
 
-    [Tooltip("Treat that given to car when it collides with finish")]
-    [SerializeField] float finTreat = 50;
-
-    [Tooltip("Score for second after finish")]
-    [SerializeField] float scoreAfterFin = 15;
-
-    [Tooltip("Penalty for crashing in the wall")]
-    [SerializeField] float trick;
+    public DFSettings dfSettings;
     [SerializeField] LayerMask wallMask;
     private Vector3 prevPos = Vector3.zero;
     [SerializeField] private Vector3 curPos = Vector3.zero;
-    private Vector3 curNorm;
     [SerializeField] private float distance = 0;
-    private float temp_dist_sqr = 0;
     [SerializeField] private bool valid = true;
     [SerializeField] private Material invalidMaterial;
     [SerializeField] private MeshRenderer carBody;
@@ -28,86 +17,103 @@ public class DistanceFinder : MonoBehaviour
 
     private bool finished = false;
 
-    private void ChangeMat(){
+    private void ChangeMat()
+    {
         carBody.material = invalidMaterial;
         print("Stop " + distance.ToString());
     }
-    public void Refresh(){
-        
+    public void Refresh()
+    {
+        touching = false;
+        finished = false;
+        valid = true;
+        prevPos = Vector3.zero;
+        curPos = Vector3.zero;
+        distance = 0;
     }
 
-    private void OnTriggerEnter(Collider other){
+    private void OnTriggerEnter(Collider other)
+    {
         switch (other.tag)
         {
             case "CheckPoint":
-                if(!valid || touching){
+                if (!valid || touching)
+                {
                     break;
                 }
 
                 //First check point
-                if(curPos == prevPos){
+                if (curPos == prevPos)
+                {
                     touching = true;
                     curPos = other.transform.position;
-                    curNorm = other.transform.forward;
                     break;
                 }
 
-                if(curPos == other.transform.position){
-                    
+                if (curPos == other.transform.position)
+                {
+
                     ChangeMat();
                     valid = false;
                     break;
                 }
 
-                if(prevPos == other.transform.position){
-                    distance -= treat*2 ;
+                if (prevPos == other.transform.position)
+                {
+                    distance -= dfSettings.treatFCheckPoint * 2;
                     ChangeMat();
                     valid = false;
                 }
 
 
-                
+
                 touching = true;
                 prevPos = curPos;
                 curPos = other.transform.position;
-                curNorm = other.transform.forward;
                 distance += (prevPos - other.transform.position).magnitude;
-                distance += treat;
+                distance += dfSettings.treatFCheckPoint;
 
                 break;
 
             case "Fin":
-                distance += finTreat;
+                distance += dfSettings.finTreat;
                 finished = true;
-            break;
-            
+                break;
+
         }
-        
+
     }
 
-    void OnCollisionStay(Collision collisionInfo){
-        if(valid && !finished)
-            if(collisionInfo.gameObject.layer == wallMask){
-                distance -= trick*Time.deltaTime;
-                if(distance < 0){
+    void OnCollisionStay(Collision collisionInfo)
+    {
+        if (valid && !finished)
+            if (collisionInfo.gameObject.layer == wallMask)
+            {
+                distance -= dfSettings.wallTrick * Time.deltaTime;
+                if (distance < 0)
+                {
                     ChangeMat();
                     valid = false;
                 }
             }
     }
 
-    private void OnTriggerExit(Collider other){
+    private void OnTriggerExit(Collider other)
+    {
         touching = false;
     }
 
-    private void Update(){
-        if(finished){
-            distance += scoreAfterFin * Time.deltaTime;
+    private void Update()
+    {
+        if (finished)
+        {
+            distance += dfSettings.scoreAfterFin * Time.deltaTime;
         }
     }
 
-    public float GetDist(){
-        if(valid && !finished)
+    public float GetDist()
+    {
+        if (valid && !finished)
             return distance + (curPos - transform.position).magnitude;
         return distance;
     }

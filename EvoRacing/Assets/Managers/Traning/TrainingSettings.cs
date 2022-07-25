@@ -12,6 +12,34 @@ public class TrainingSettings : MonoBehaviour
     }
     [SerializeField] int minCarNum = 10;
     [SerializeField] int maxCarNum = 200;
+
+    //Count of cars
+    public void ChangeCarNum(int val){
+        if(_carNum + val < minCarNum){
+            _carNum = minCarNum;
+            return;
+        }
+        if(_carNum + val > maxCarNum){
+            _carNum = maxCarNum;
+            return;
+        }
+        
+        _carNum += val;
+    }
+
+    public void SetCarNum(int val){
+        if(val < minCarNum){
+            _carNum = minCarNum;
+            return;
+        }
+        if(val > maxCarNum){
+            _carNum = maxCarNum;
+            return;
+        }
+        
+        _carNum = val;
+    }
+
     [Header("Count of childrens")]
     [SerializeField] int _from2Parents = 5;
     [HideInInspector]
@@ -23,6 +51,32 @@ public class TrainingSettings : MonoBehaviour
 
     [SerializeField] int maxFrom2Parents = 200;
 
+    //Count of childrenss
+    public void ChangeFrom2P(int val){
+        if(_from2Parents + val < minFrom2Parents){
+            _from2Parents = minFrom2Parents;
+            return;
+        }
+        if(_from2Parents + val > maxFrom2Parents){
+            _from2Parents = maxFrom2Parents;
+            return;
+        }
+        
+        _from2Parents += val;
+    }
+
+    public void SetFrom2P(int val){
+        if(val < minFrom2Parents){
+            _from2Parents = minFrom2Parents;
+            return;
+        }
+        if(val > maxFrom2Parents){
+            _from2Parents = maxFrom2Parents;
+            return;
+        }
+        _from2Parents = val;
+    }
+
     [Header("PersentOfMutation")]
 
     [SerializeField] float _percentOfMutation = 0.1f;
@@ -33,6 +87,33 @@ public class TrainingSettings : MonoBehaviour
     float minPercentOfMutation = 0f;
     float maxPcentOfMutation = 1f;
 
+     //PersentOfMutation
+    public void ChangePerсOfMut(float val){
+        if(_percentOfMutation + val < minPercentOfMutation){
+            _percentOfMutation = minPercentOfMutation;
+            return;
+        }
+        if(_percentOfMutation + val > maxPcentOfMutation){
+            _percentOfMutation = maxPcentOfMutation;
+            return;
+        }
+        
+        _percentOfMutation += val;
+    }
+
+    public void SetPerсOfMut(float val){
+        if(val < minPercentOfMutation){
+            _percentOfMutation = minPercentOfMutation;
+            return;
+        }
+        if(val > maxPcentOfMutation){
+            _percentOfMutation = maxPcentOfMutation;
+            return;
+        }
+        _percentOfMutation = val;
+    }
+
+
     [Header("Mutation value")]
     [SerializeField] float _mutationValue = 0.5f;
     [HideInInspector]
@@ -41,6 +122,33 @@ public class TrainingSettings : MonoBehaviour
     }
     [SerializeField] float minMutationValue = 0f;
     [SerializeField] float maxMutationValue = 10f;
+
+     //Mutation value
+
+    public void ChangeMutationValue(float val){
+        if(_mutationValue + val < minMutationValue){
+            _mutationValue = minMutationValue;
+            return;
+        }
+        if(_mutationValue + val > maxMutationValue){
+            _mutationValue = maxMutationValue;
+            return;
+        }
+        
+        _mutationValue += val;
+    }
+
+    public void SetMutationValue(float val){
+        if(val < minMutationValue){
+            _mutationValue = minMutationValue;
+            return;
+        }
+        if(val > maxMutationValue){
+            _mutationValue = maxMutationValue;
+            return;
+        }
+        _mutationValue = val;
+    }
 
     [Header("Time of training")]
     [SerializeField] float _time = 60;
@@ -51,88 +159,30 @@ public class TrainingSettings : MonoBehaviour
     [SerializeField] float minTime = 2.5f;
     [SerializeField] float maxTime = 300f;
 
-    //Count of cars
-    public bool ChangeCarNum(int val){
-        if(_carNum + val < minCarNum || _carNum + val > maxCarNum){
-            return false;
-        }
-        _carNum += val;
-        return true;
-    }
-
-    public bool SetCarNum(int val){
-        if(val < minCarNum || val > maxCarNum){
-            return false;
-        }
-        _carNum = val;
-        return true;
-    }
-    //Count of childrenss
-    public bool ChangeFrom2P(int val){
-        if(_from2Parents + val < minFrom2Parents || _from2Parents + val > maxFrom2Parents){
-            return false;
-        }
-        _from2Parents += val;
-        return true;
-    }
-
-    public bool SetFrom2P(int val){
-        if(val < minFrom2Parents || val > maxFrom2Parents){
-            return false;
-        }
-        _from2Parents = val;
-        return true;
-    }
-    //PersentOfMutation
-    public bool ChangePerсOfMut(float val){
-        if(_percentOfMutation + val < minPercentOfMutation || _percentOfMutation + val > maxPcentOfMutation){
-            return false;
-        }
-        _percentOfMutation += val;
-        return true;
-    }
-
-    public bool SetPerсOfMut(float val){
-        if(val < minPercentOfMutation || val > maxPcentOfMutation){
-            return false;
-        }
-        _percentOfMutation = val;
-        return true;
-    }
-
-    //Mutation value
-
-    public bool ChangeMutationValue(float val){
-        if(_mutationValue + val < minMutationValue || _mutationValue + val > maxMutationValue){
-            return false;
-        }
-        _mutationValue += val;
-        return true;
-    }
-
-    public bool SetMutationValue(float val){
-        if(val < minMutationValue || val > maxMutationValue){
-            return false;
-        }
-        _mutationValue = val;
-        return true;
-    }
-
     //Time
 
-    public bool ChangeTime(float val){
-        if(_time + val < minTime || _time + val > maxTime){
-            return false;
+    public void ChangeTime(float val){
+        if(_time + val < minTime){
+            _time = minTime;
+            return;
         }
+        if(_time + val > maxTime){
+            _time = maxTime;
+            return;
+        }
+        
         _time += val;
-        return true;
     }
 
-    public bool SetTime(float val){
-        if(val < minTime || val > maxTime){
-            return false;
+    public void SetTime(float val){
+        if(val < minTime){
+            _time = minTime;
+            return;
+        }
+        if(val > maxTime){
+            _time = maxTime;
+            return;
         }
         _time = val;
-        return true;
     }
 }

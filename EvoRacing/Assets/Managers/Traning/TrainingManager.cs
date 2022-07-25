@@ -9,13 +9,14 @@ public class TrainingManager : MonoBehaviour
 
     [SerializeField] CarManager carManag;
     [SerializeField] TrainingSettings trSettings;
+    [SerializeField] DFSettings dFSettings;
+    [SerializeField] MainManager MM;
     [SerializeField] Transform start;
     [SerializeField] GameObject carPrefab;
 
     [SerializeField] GameObject ScrollView;
     [SerializeField] GameObject carItem;
     [SerializeField] GameObject UITime;
-    [SerializeField] GameObject UITimeScale;
     [SerializeField] GameObject saveWindow;
     [SerializeField] GameObject loadWindow;
     private Vector3 spawnPoint;
@@ -23,8 +24,6 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] private bool isStartedTraining;
     [SerializeField] private bool AutoStart = true;
 
-    [Range(1f, 5f)]
-    [SerializeField] float timeScale = 1f;
     [SerializeField] string defaultSlot = "main";
 
     private bool pauseCars = true;
@@ -33,12 +32,16 @@ public class TrainingManager : MonoBehaviour
     void Start()
     {
         isStartedTraining = false;
+        //Set distance finder settings 
+        carPrefab.GetComponent<DistanceFinder>().dfSettings = dFSettings;
+
+        //Initialise cars for car manager
         GameObject[] cars = new GameObject[trSettings.carNum];
         spawnPoint = new Vector3(start.position.x, start.position.y + 1.3f, start.position.z);
         for (int i = 0; i < trSettings.carNum; i++)
         {
             cars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-
+            // cars[i].GetComponent<DistanceFinder>().SetDFSettings(dFSettings);
         }
 
         carManag.FillNewCars(cars);
@@ -47,14 +50,14 @@ public class TrainingManager : MonoBehaviour
         string temp_loaded = PlayerPrefs.GetString("SlotNN" + defaultSlot);
         if (temp_loaded == "")
         {
-            Refresh();
+            RefreshNN();
         }
         else
         {
             LoadAndMutateNN(defaultSlot);
         }
         print("FinishStart");
-        
+
     }
 
     void Update()
@@ -75,7 +78,7 @@ public class TrainingManager : MonoBehaviour
                 if (AutoStart)
                     startTrainingSession();
                 else
-                    Time.timeScale = 0;
+                    MM.PauseGame();
             }
             else
             {
@@ -319,39 +322,40 @@ public class TrainingManager : MonoBehaviour
     }
 
     //VINESTY ---------------------------------------------------------------------
-    public void CreateTable()
-    {
-        if (ScrollView.activeSelf)
-        {
-            ScrollView.SetActive(false);
-            Transform temp = ScrollView.transform.GetChild(0).transform;
-            for (int i = 0; i < temp.childCount; i++)
-            {
-                Destroy(temp.GetChild(0));
-            }
-        }
-        else
-        {
-            GameObject[] cars = carManag.GetAllCars();
-            ScrollView.SetActive(true);
-            Transform content = ScrollView.transform.GetChild(0).transform.GetChild(0);
-            cars = cars.OrderBy((car) => car.GetComponent<DistanceFinder>().GetDist()).Reverse<GameObject>().ToArray<GameObject>();
-            foreach (GameObject car in cars)
-            {
-                GameObject temp = Instantiate(carItem, content);
-                temp.transform.GetChild(1).GetComponent<Text>().text = "Score: " + car.GetComponent<DistanceFinder>().GetDist().ToString("0,000");
-                temp.transform.parent = content;
-            }
-        }
+    // public void CreateTable()
+    // {
+    //     if (ScrollView.activeSelf)
+    //     {
+    //         ScrollView.SetActive(false);
+    //         Transform temp = ScrollView.transform.GetChild(0).transform;
+    //         for (int i = 0; i < temp.childCount; i++)
+    //         {
+    //             Destroy(temp.GetChild(0));
+    //         }
+    //     }
+    //     else
+    //     {
+    //         GameObject[] cars = carManag.GetAllCars();
+    //         ScrollView.SetActive(true);
+    //         Transform content = ScrollView.transform.GetChild(0).transform.GetChild(0);
+    //         cars = cars.OrderBy((car) => car.GetComponent<DistanceFinder>().GetDist()).Reverse<GameObject>().ToArray<GameObject>();
+    //         foreach (GameObject car in cars)
+    //         {
+    //             GameObject temp = Instantiate(carItem, content);
+    //             temp.transform.GetChild(1).GetComponent<Text>().text = "Score: " + car.GetComponent<DistanceFinder>().GetDist().ToString("0,000");
+    //             temp.transform.parent = content;
+    //         }
+    //     }
 
-    }
+    // }
 
-    public void Refresh()
+    public void RefreshNN()
     {
         if (!isStartedTraining)
         {
             GameObject[] cars = carManag.GetAllCars();
-            foreach(GameObject car in carManag.GetAllCars()){
+            foreach (GameObject car in carManag.GetAllCars())
+            {
                 car.GetComponent<CarNN>().InitialiseNN();
             }
         }
@@ -360,7 +364,7 @@ public class TrainingManager : MonoBehaviour
 
     public void startTrainingSession()
     {
-        Time.timeScale = timeScale;
+        MM.UnPauseGame();
 
         if (pauseCars)
         {
@@ -376,44 +380,8 @@ public class TrainingManager : MonoBehaviour
             pauseCars = false;
             curTime = 0;
         }
-        
+
     }
-
-    //UI Time change
-    public void IncreaseTime()
-    {
-        trSettings.ChangeTime(2.5f);
-        RefreshUITime();
-    }
-
-    public void ReduceTime()
-    {
-        trSettings.ChangeTime(-2.5f);
-        RefreshUITime();
-    }
-
-    private void RefreshUITime() { UITime.GetComponent<Text>().text = trSettings.time.ToString() + "s"; }
-
-    //UI TimeScale change
-    public void IncreaseTimeScale()
-    {
-        if (timeScale < 5)
-            timeScale += 1f;
-        RefreshUITimeScale();
-        if (isStartedTraining)
-            Time.timeScale = timeScale;
-    }
-
-    public void ReduceTimeScale()
-    {
-        if (timeScale > 1)
-            timeScale -= 1f;
-        RefreshUITimeScale();
-        if (isStartedTraining)
-            Time.timeScale = timeScale;
-    }
-
-    private void RefreshUITimeScale() { UITimeScale.GetComponent<Text>().text = timeScale.ToString() + "x"; }
 
     //Work with saving and loading NN
 
@@ -421,8 +389,8 @@ public class TrainingManager : MonoBehaviour
     {
         if (!isStartedTraining)
         {
-            
-            carManag.LoadNNTo(slot,0);
+
+            carManag.LoadNNTo(slot, 0);
             GameObject[] cars = carManag.GetAllCars();
             CarNN tempNN = cars[0].GetComponent<CarNN>();
             float[][] w1 = tempNN.getW1();
@@ -525,10 +493,6 @@ public class TrainingManager : MonoBehaviour
         }
     }
 
-    public float GetMaxTime()
-    {
-        return trSettings.time;
-    }
     public float GetCurrentTime()
     {
         return curTime;
