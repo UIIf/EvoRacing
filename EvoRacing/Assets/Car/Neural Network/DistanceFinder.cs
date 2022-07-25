@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class DistanceFinder : MonoBehaviour
 {
-
-    public DFSettings dfSettings;
+    public DFSettings dFSettings;
+    private float treatFCheckPoint;
+    private float finTreat;
+    private float scoreAfterFin;
+    private float wallTrick;
     [SerializeField] LayerMask wallMask;
     private Vector3 prevPos = Vector3.zero;
     [SerializeField] private Vector3 curPos = Vector3.zero;
@@ -22,6 +25,13 @@ public class DistanceFinder : MonoBehaviour
         carBody.material = invalidMaterial;
         print("Stop " + distance.ToString());
     }
+    private void Start(){
+        treatFCheckPoint = dFSettings.treatFCheckPoint;
+        finTreat = dFSettings.finTreat;
+        scoreAfterFin = dFSettings.scoreAfterFin;
+        wallTrick = dFSettings.wallTrick;
+    }
+    
     public void Refresh()
     {
         touching = false;
@@ -60,7 +70,7 @@ public class DistanceFinder : MonoBehaviour
 
                 if (prevPos == other.transform.position)
                 {
-                    distance -= dfSettings.treatFCheckPoint * 2;
+                    distance -= treatFCheckPoint * 2;
                     ChangeMat();
                     valid = false;
                 }
@@ -71,12 +81,12 @@ public class DistanceFinder : MonoBehaviour
                 prevPos = curPos;
                 curPos = other.transform.position;
                 distance += (prevPos - other.transform.position).magnitude;
-                distance += dfSettings.treatFCheckPoint;
+                distance += treatFCheckPoint;
 
                 break;
 
             case "Fin":
-                distance += dfSettings.finTreat;
+                distance += finTreat;
                 finished = true;
                 break;
 
@@ -84,12 +94,12 @@ public class DistanceFinder : MonoBehaviour
 
     }
 
-    void OnCollisionStay(Collision collisionInfo)
+    private void OnCollisionStay(Collision collisionInfo)
     {
         if (valid && !finished)
             if (collisionInfo.gameObject.layer == wallMask)
             {
-                distance -= dfSettings.wallTrick * Time.deltaTime;
+                distance -= wallTrick * Time.deltaTime;
                 if (distance < 0)
                 {
                     ChangeMat();
@@ -107,7 +117,7 @@ public class DistanceFinder : MonoBehaviour
     {
         if (finished)
         {
-            distance += dfSettings.scoreAfterFin * Time.deltaTime;
+            distance += scoreAfterFin * Time.deltaTime;
         }
     }
 
@@ -116,5 +126,10 @@ public class DistanceFinder : MonoBehaviour
         if (valid && !finished)
             return distance + (curPos - transform.position).magnitude;
         return distance;
+    }
+
+    public void StopDF(){
+        valid = false;
+        finished = false;
     }
 }

@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CarManager : MonoBehaviour
 {
+    public delegate void CarAction(GameObject car);
     GameObject[] cars = new GameObject[0];
     bool isDrive = false;
 
@@ -36,6 +38,8 @@ public class CarManager : MonoBehaviour
         foreach (GameObject car in cars)
         {
             car.GetComponent<CarScript>().run = false;
+            car.GetComponent<DistanceFinder>().StopDF();
+            car.GetComponent<Rigidbody>().isKinematic = true;
         }
         isDrive = false;
     }
@@ -78,12 +82,16 @@ public class CarManager : MonoBehaviour
         if (index > cars.Length && index < 0) { return false; }
         return cars[index].GetComponent<CarNN>().LoadNN(slot);
     }
-
     public GameObject[] GetAllCars()
     {
         return cars;
     }
 
+    public void ApplyToAll(CarAction act){
+        foreach(GameObject car in cars){
+            act.Invoke(car);
+        }
+    }
     public GameObject GetCar(int index)
     {
         if(index > cars.Length && index < 0) {return null;}

@@ -4,6 +4,12 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 
+enum TrainingState{
+    beforeTraining,
+    onTraining,
+    endTraining
+}
+
 public class TrainingManager : MonoBehaviour
 {
 
@@ -21,19 +27,15 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] GameObject loadWindow;
     private Vector3 spawnPoint;
     [SerializeField] private float curTime;
-    [SerializeField] private bool isStartedTraining;
     [SerializeField] private bool AutoStart = true;
-
     [SerializeField] string defaultSlot = "main";
 
-    private bool pauseCars = true;
+    [SerializeField] TrainingState trState = TrainingState.beforeTraining;
 
 
     void Start()
     {
-        isStartedTraining = false;
-        //Set distance finder settings 
-        carPrefab.GetComponent<DistanceFinder>().dfSettings = dFSettings;
+        carPrefab.GetComponent<DistanceFinder>().dFSettings = dFSettings;
 
         //Initialise cars for car manager
         GameObject[] cars = new GameObject[trSettings.carNum];
@@ -56,29 +58,14 @@ public class TrainingManager : MonoBehaviour
         {
             LoadAndMutateNN(defaultSlot);
         }
-        print("FinishStart");
-
     }
 
     void Update()
     {
-        if (isStartedTraining && !pauseCars)
-        {
-
+        if(trState == TrainingState.onTraining){
             if (curTime >= trSettings.time)
             {
-                curTime = trSettings.time;
-                if (isStartedTraining)
-                {
-                    carManag.SaveMaxNN(defaultSlot);
-                    isStartedTraining = false;
-                    curTime = trSettings.time;
-                }
-
-                if (AutoStart)
-                    startTrainingSession();
-                else
-                    MM.PauseGame();
+                StopTrainingSession();
             }
             else
             {
@@ -89,7 +76,6 @@ public class TrainingManager : MonoBehaviour
 
     void Training()
     {
-        isStartedTraining = false;
         curTime = 0;
         GameObject[] cars = carManag.GetAllCars();
         // float[] scores = new float[cars.Length];
@@ -351,13 +337,9 @@ public class TrainingManager : MonoBehaviour
 
     public void RefreshNN()
     {
-        if (!isStartedTraining)
+        if (trState == TrainingState.endTraining)
         {
-            GameObject[] cars = carManag.GetAllCars();
-            foreach (GameObject car in carManag.GetAllCars())
-            {
-                car.GetComponent<CarNN>().InitialiseNN();
-            }
+            carManag.ApplyToAll(new CarManager.CarAction(x =>x.GetComponent<CarNN>().InitialiseNN()));
         }
     }
 
@@ -366,28 +348,42 @@ public class TrainingManager : MonoBehaviour
     {
         MM.UnPauseGame();
 
-        if (pauseCars)
-        {
+        if(trState == TrainingState.beforeTraining){
             carManag.StartAllCars();
-            pauseCars = false;
-            isStartedTraining = true;
         }
-        if (!isStartedTraining)
-        {
+        else if(trState == TrainingState.endTraining){
             Training();
             carManag.StartAllCars();
-            isStartedTraining = true;
-            pauseCars = false;
             curTime = 0;
         }
-
+        trState = TrainingState.onTraining;
     }
 
-    //Work with saving and loading NN
+    public void StopTrainingSession(){
+        if(trState == TrainingState.onTraining){
+            carManag.SaveMaxNN(defaultSlot);
+            carManag.StopAllCars();
+            curTime = trSettings.time;
+            trState = TrainingState.endTraining;
+            if (AutoStart)
+                startTrainingSession();
+            else{
+                carManag.StopAllCars();
+            }  
+        }
+        
+    }
+
+    public float GetCurrentTime()
+    {
+        return curTime;
+    }
+
+    //PERENESTI V DRUGOI SCRIPT
 
     public void LoadAndMutateNN(string slot)
     {
-        if (!isStartedTraining)
+        if (trState == TrainingState.endTraining || trState == TrainingState.beforeTraining)
         {
 
             carManag.LoadNNTo(slot, 0);
@@ -483,7 +479,6 @@ public class TrainingManager : MonoBehaviour
             BuildLoadWindow();
         }
     }
-
     public void ResetCarPosition()
     {
         foreach (GameObject car in carManag.GetAllCars())
@@ -492,10 +487,4 @@ public class TrainingManager : MonoBehaviour
             car.transform.rotation = carPrefab.transform.rotation;
         }
     }
-
-    public float GetCurrentTime()
-    {
-        return curTime;
-    }
-
 }
