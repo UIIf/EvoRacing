@@ -27,6 +27,8 @@ public class CarNN : MonoBehaviour
     private float[] hiddenLayer2;
     private float[][] w3;
     private bool initialized = false;
+
+    private float[] input = new float[0];
     
 
 
@@ -161,7 +163,9 @@ public class CarNN : MonoBehaviour
 
     public Vector2 predict(){
 
-        float[] input = new float[countOfRays + 1];
+        if(input.Length != countOfRays + 1){
+            input = new float[countOfRays + 1];
+        }
         float[] rays = cri.GetRaysInfo();
         for(int i = 0; i < countOfRays; i++){
             input[i] = rays[i];

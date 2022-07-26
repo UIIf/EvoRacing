@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4e5a3d3f773d64aa77b7d863c57558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 200
+  power: 400
   brakeTorque: 4000
   horInput: 0
   verInput: 0
@@ -726,10 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4170c72346fd593449c008c37d9befd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treat: 20
-  finTreat: 50
-  scoreAfterFin: 15
-  trick: 15
+  dFSettings: {fileID: 0}
   wallMask:
     serializedVersion: 2
     m_Bits: 64

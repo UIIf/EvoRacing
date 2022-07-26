@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 enum TrainingState{
     beforeTraining,
+    setNN,
     onTraining,
     endTraining
 }
@@ -58,6 +59,7 @@ public class TrainingManager : MonoBehaviour
         {
             LoadAndMutateNN(defaultSlot);
         }
+        trState = TrainingState.beforeTraining;
     }
 
     void Update()
@@ -76,6 +78,7 @@ public class TrainingManager : MonoBehaviour
 
     void Training()
     {
+        trState = TrainingState.setNN;
         curTime = 0;
         GameObject[] cars = carManag.GetAllCars();
         // float[] scores = new float[cars.Length];
@@ -300,6 +303,7 @@ public class TrainingManager : MonoBehaviour
             newCars[offset * trSettings.from2Parents + newCarNum - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2, p2W3);
         }
         carManag.FillNewCars(newCars);
+        trState = TrainingState.onTraining;
     }
 
     public void changeAutoStart()
@@ -337,8 +341,9 @@ public class TrainingManager : MonoBehaviour
 
     public void RefreshNN()
     {
-        if (trState == TrainingState.endTraining)
+        if (trState == TrainingState.endTraining || trState == TrainingState.beforeTraining)
         {
+            trState = TrainingState.setNN;
             carManag.ApplyToAll(new CarManager.CarAction(x =>x.GetComponent<CarNN>().InitialiseNN()));
         }
     }
@@ -383,9 +388,10 @@ public class TrainingManager : MonoBehaviour
 
     public void LoadAndMutateNN(string slot)
     {
+        
         if (trState == TrainingState.endTraining || trState == TrainingState.beforeTraining)
         {
-
+            trState = TrainingState.setNN;
             carManag.LoadNNTo(slot, 0);
             GameObject[] cars = carManag.GetAllCars();
             CarNN tempNN = cars[0].GetComponent<CarNN>();
@@ -400,22 +406,19 @@ public class TrainingManager : MonoBehaviour
         }
 
     }
-
     public void SubmitSave()
     {
-        Text saveText = saveWindow.transform.Find("InputField").Find("Text").GetComponent<Text>();
+        InputField saveText = saveWindow.transform.Find("InputField").GetComponent<InputField>();
 
         if (saveText.text != "" && saveText.text.Length < 10)
         {
-            saveText.text.Replace(' ', '_');
-
-            carManag.SaveMaxNN(saveText.text);
-            SaveSlotName(saveText.text);
+            string slot = saveText.text.Replace(' ', '_');
             saveText.text = "";
+            carManag.SaveMaxNN(slot);
+            SaveSlotName(slot);
             SaveWindowSwitch();
         }
     }
-
     void BuildLoadWindow()
     {
         Transform content = loadWindow.transform.Find("Viewport").Find("Content");
@@ -432,16 +435,17 @@ public class TrainingManager : MonoBehaviour
         foreach (string element in slots)
         {
             if (element == "") continue;
-
             GameObject newElement = Instantiate(template, content);
             Text newElementNameText = newElement.transform.Find("SlotName").GetComponent<Text>();
             //Text newElementGenNumText = newElement.transform.Find("GenerationsNum").GetComponent<Text>();
-            //Button newElementDeleteButton = newElement.transform.Find("DeleteButton").GetComponent<Button>();
+            Button newElementDeleteButton = newElement.transform.Find("DeleteButton").GetComponent<Button>();
             Button newElementButton = newElement.GetComponent<Button>();
 
             newElementNameText.text = element;
             newElementButton.onClick.AddListener(() => LoadAndMutateNN(element));
             newElementButton.onClick.AddListener(() => LoadWindowSwitch());
+
+            newElementDeleteButton.onClick.AddListener(() => DeleteSlot(element));
 
             newElement.SetActive(true);
         }
@@ -451,14 +455,13 @@ public class TrainingManager : MonoBehaviour
         string str = PlayerPrefs.GetString("AllTheSlots");
 
         if (str == "")
-            PlayerPrefs.SetString("AllTheSlots", slot);
+            PlayerPrefs.SetString("AllTheSlots", slot + " ");
         else
         {
-            if (str.Contains(slot)) return;
+            if (str.Contains(slot + " ")) return;
 
-            PlayerPrefs.SetString("AllTheSlots", str + " " + slot);
+            PlayerPrefs.SetString("AllTheSlots", str + slot + " ");
         }
-
     }
     public void SaveWindowSwitch()
     {
@@ -486,5 +489,18 @@ public class TrainingManager : MonoBehaviour
             car.transform.position = spawnPoint;
             car.transform.rotation = carPrefab.transform.rotation;
         }
+    }
+
+    public void DeleteSlot(string element){
+        
+
+        PlayerPrefs.DeleteKey(element);
+
+        string slots = PlayerPrefs.GetString("AllTheSlots");
+        
+
+        PlayerPrefs.SetString("AllTheSlots", slots.Remove(slots.IndexOf(element), element.Length + 1));
+        
+        BuildLoadWindow();
     }
 }
