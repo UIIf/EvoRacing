@@ -17,22 +17,22 @@ public class CamMoveScript : MonoBehaviour
 
     private void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
+        //if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
 
-        if (Input.touchCount >= 1)
+        if (Input.touchCount >= 1 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             plane.SetNormalAndPosition(transform.up, transform.position);
 
         var delta1 = Vector3.zero;
         var delta2 = Vector3.zero;
 
-        if (Input.touchCount >= 1)
+        if (Input.touchCount >= 1 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
             delta1 = PlanePositionDelta(Input.GetTouch(0));
             if (Input.GetTouch(0).phase == TouchPhase.Moved)
                 cameras[0].transform.Translate(delta1, Space.World);
         }
 
-        if (Input.touchCount >= 2)
+        if (Input.touchCount >= 2 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
             var pos1 = PlanePosition(Input.GetTouch(0).position);
             var pos2 = PlanePosition(Input.GetTouch(1).position);
@@ -40,7 +40,7 @@ public class CamMoveScript : MonoBehaviour
             var pos2b = PlanePosition(Input.GetTouch(1).position - Input.GetTouch(1).deltaPosition);
 
             var zoom = Vector3.Distance(pos1, pos2) / Vector3.Distance(pos1b, pos2b);
-            if (zoom == 0 || zoom > 10)
+            if (cameras[0].transform.position.y < 5 || zoom == 0 || zoom > 10)
                 return;
 
             cameras[0].transform.position = Vector3.LerpUnclamped(pos1, cameras[0].transform.position, 1 / zoom);
@@ -48,6 +48,9 @@ public class CamMoveScript : MonoBehaviour
             if (rotate && pos2b != pos2)
                 cameras[0].transform.RotateAround(pos1, plane.normal, Vector3.SignedAngle(pos2 - pos1, pos2b - pos1b, plane.normal));
         }
+
+        if (cameras[0].transform.position.y < 8)
+            cameras[0].transform.position += Vector3.up*Time.deltaTime;
     }
 
     private Vector3 PlanePositionDelta(Touch touch)

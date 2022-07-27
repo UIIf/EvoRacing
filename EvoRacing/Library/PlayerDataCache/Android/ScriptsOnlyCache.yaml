@@ -138,8 +138,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 54
-      Script: {instanceID: 0}
     - Class: 64
       Script: {instanceID: 0}
     - Class: 65
@@ -157,13 +155,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1532}
     - Class: 114
-      Script: {instanceID: 2140}
-    - Class: 114
       Script: {instanceID: 2306}
     - Class: 114
       Script: {instanceID: 2418}
-    - Class: 114
-      Script: {instanceID: 2578}
     - Class: 114
       Script: {instanceID: 2586}
     - Class: 114
@@ -172,10 +166,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 2772}
     - Class: 114
       Script: {instanceID: 2858}
-    - Class: 114
-      Script: {instanceID: 3106}
-    - Class: 114
-      Script: {instanceID: 4106}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -883,7 +873,7 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: 0fac9aadd1d00244c412c47dbfef2fb5
+      Hash: c911fa6aa8f3396d36948e382fad4c5c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CamMoveScript
