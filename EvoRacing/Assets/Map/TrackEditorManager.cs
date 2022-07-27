@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class TrackEditorManager : MonoBehaviour
 {
-    //delete
-    [SerializeField] Transform temp;
-
     [SerializeField] Transform currentEnd;
     [SerializeField] GameObject button;
     [SerializeField] GameObject[] prefabs;
@@ -69,8 +66,8 @@ public class TrackEditorManager : MonoBehaviour
         }
 
         //delete
-        if (button != null)
-            temp.transform.position = button.transform.position;
+        /*if (button != null)
+            temp.transform.position = button.transform.position;*/
     }
     
     public void setSelectedPrefab(int value) { selectedPrefab = value; }
@@ -129,8 +126,8 @@ public class TrackEditorManager : MonoBehaviour
             RefreshButtonPosition();}
 
         //delete
-        if(button != null)
-            temp.transform.position = button.transform.position;
+        /*if(button != null)
+            temp.transform.position = button.transform.position;*/
 
         if (button != null && selectedPrefab == 12)
             button.SetActive(false);

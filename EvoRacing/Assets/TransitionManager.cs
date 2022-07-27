@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class TransitionManager : MonoBehaviour
 {
+    private void Start()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+    }
     public void ToMenu()
     {
         SceneManager.LoadScene(0);
