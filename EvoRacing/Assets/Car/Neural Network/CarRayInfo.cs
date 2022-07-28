@@ -53,7 +53,6 @@ public class CarRayInfo : MonoBehaviour
     //delete
     void Update(){
         
-
         if(showRays){
             float[] dists = GetRaysInfo();
             for(int i = 0; i < dists.Length; i++){

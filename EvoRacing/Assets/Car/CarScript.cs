@@ -71,15 +71,17 @@ public class CarScript : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = true;
     }
     public void StartCar(int offset, int frameCount){
-        if(ready_wheels != 4) return;
+        //if (ready_wheels != 4) { print(ready_wheels);  return; }
         fc = frameCount;
         StartCoroutine(StartCarCoroutine(offset));
     }
 
     IEnumerator StartCarCoroutine(int offset){
-        while((int)(Time.fixedTime / Time.fixedDeltaTime)%fc != offset){
+        print(offset);
+        while ((int)(Time.fixedTime / Time.fixedDeltaTime)%fc != offset || ready_wheels != 4){         
             yield return new WaitForFixedUpdate();
         }
+        print("STARTED");
         StartCoroutine(ProcessForcesCoroutine());
     }
 

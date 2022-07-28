@@ -21,8 +21,6 @@ public class CarManager : MonoBehaviour
             cars[i] = newCars[i];
         }
         isDrive = false;
-        print("Filled:");
-        print(newCars.Length);
     }
 
     public void StartAllCars()

@@ -46,8 +46,6 @@ public class TrainingManager : MonoBehaviour
 
         //Fill nn for new cars
         string temp_loaded = PlayerPrefs.GetString("SlotNN" + defaultSlot);
-        print("Start");
-        print(trState);
         if (temp_loaded == "")
         {
             RefreshNN();
@@ -380,7 +378,6 @@ public class TrainingManager : MonoBehaviour
             for (int i = 1; i < cars.Length; i++)
             {
                 cars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(w1, trSettings.percentOfMutation, trSettings.mutationValue), NeuralNetwork.mutate(w2, trSettings.percentOfMutation, trSettings.mutationValue), NeuralNetwork.mutate(w3, trSettings.percentOfMutation, trSettings.mutationValue));
-                print(cars[i].GetComponent<CarNN>().getW1());
             }
             trState = temp;
         }
@@ -401,7 +398,6 @@ public class TrainingManager : MonoBehaviour
         {
             newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
             CarNN tempNN = cars[i].GetComponent<CarNN>();
-            print(tempNN.getW1());
             newCars[i].GetComponent<CarNN>().FillNN(tempNN.getW1(), tempNN.getW2(), tempNN.getW3());
         }
 
