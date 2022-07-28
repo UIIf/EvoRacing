@@ -17,15 +17,17 @@ public class CarRayInfo : MonoBehaviour
     [SerializeField] LayerMask eyeLayerMask;
 
     private float[] ViewAngles;
+    private Vector2[] SinCosAngle;
 
     void Awake()
     {
         
         ViewAngles = new float[countOfRays];
+        SinCosAngle = new Vector2[countOfRays];
         
         for(int i = 0; i < countOfRays; i++){
             ViewAngles[i] = FOVAngle * (0.5f  - i/(countOfRays - 1f))*Mathf.Deg2Rad;
-             
+            SinCosAngle[i] = new Vector2(Mathf.Sin(ViewAngles[i]), Mathf.Cos(ViewAngles[i]));
         }
     }
 
@@ -33,8 +35,9 @@ public class CarRayInfo : MonoBehaviour
     {
         RaycastHit rayHit;
         float[] ret = new float[countOfRays];
+
         for(int i = 0; i < countOfRays; i++){
-            Vector3 ViewVectro = Eye.right * Mathf.Sin(ViewAngles[i]) + Eye.forward * Mathf.Cos(ViewAngles[i]);
+            Vector3 ViewVectro = Eye.right * SinCosAngle[i][0] + Eye.forward * SinCosAngle[i][1];
             if(Physics.Raycast(Eye.position, ViewVectro, out rayHit, lenOfRay, eyeLayerMask)){
                 ret[i] = rayHit.distance/ lenOfRay;
             }
@@ -49,11 +52,12 @@ public class CarRayInfo : MonoBehaviour
     public int GetRaysCount() { return countOfRays; }
     //delete
     void Update(){
-        float[] dists = GetRaysInfo();
+        
 
         if(showRays){
+            float[] dists = GetRaysInfo();
             for(int i = 0; i < dists.Length; i++){
-                Vector3 ViewVectro = Eye.right * Mathf.Sin(ViewAngles[i]) + Eye.forward * Mathf.Cos(ViewAngles[i]);
+                Vector3 ViewVectro = Eye.right * SinCosAngle[i][0] + Eye.forward * SinCosAngle[i][1];
                 Debug.DrawLine(Eye.position, Eye.position + ViewVectro * dists[i] * lenOfRay, Color.blue);
             }
         }

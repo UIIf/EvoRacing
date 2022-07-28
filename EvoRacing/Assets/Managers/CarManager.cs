@@ -7,6 +7,7 @@ public class CarManager : MonoBehaviour
 {
     public delegate void CarAction(GameObject car);
     [SerializeField] GameObject[] cars = new GameObject[0];
+    [SerializeField] int frameCount = 4;
     bool isDrive = false;
 
     public void FillNewCars(GameObject[] newCars)
@@ -27,9 +28,10 @@ public class CarManager : MonoBehaviour
     public void StartAllCars()
     {
         if (isDrive) { return; }
-        foreach (GameObject car in cars)
+        for(int i = 0; i < cars.Length; i++)
         {
-            car.GetComponent<CarScript>().run = true;
+            cars[i].GetComponent<CarScript>().StartCar(i%frameCount,frameCount);
+
         }
         isDrive = true;
     }
@@ -39,9 +41,8 @@ public class CarManager : MonoBehaviour
         if (!isDrive) { return; }
         foreach (GameObject car in cars)
         {
-            car.GetComponent<CarScript>().run = false;
+            car.GetComponent<CarScript>().StopCar();
             car.GetComponent<DistanceFinder>().StopDF();
-            car.GetComponent<Rigidbody>().isKinematic = true;
         }
         isDrive = false;
     }

@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+enum DFStates{
+    valid,
+    invalid,
+    finiched
+}
+
 public class DistanceFinder : MonoBehaviour
 {
     public DFSettings dFSettings;
@@ -57,14 +63,6 @@ public class DistanceFinder : MonoBehaviour
                 {
                     touching = true;
                     curPos = other.transform.position;
-                    break;
-                }
-
-                if (curPos == other.transform.position)
-                {
-
-                    ChangeMat();
-                    valid = false;
                     break;
                 }
 

@@ -13,8 +13,8 @@ public class CarScript : MonoBehaviour
     private float steerAngle;
 
     public WheelScript[] wheels;
-
-    public bool run = false;
+    private int fc;
+    private Vector2 output;
     private int ready_wheels = 0;
     void Start(){
         
@@ -22,31 +22,65 @@ public class CarScript : MonoBehaviour
     }
 
     //NN Control
-    void FixedUpdate()
-    {
-        if (ready_wheels == 4 && run)
-        {
-            ProcessForces();
-        }
+    // void FixedUpdate()
+    // {
+    //     if (ready_wheels == 4 && run)
+    //     {
+    //         ProcessForces();
+    //     }
 
-    }
+    // }
 
     public void wheel_is_ready()
     {
         ready_wheels++;
     }
 
-    void ProcessForces()
-    {
-        Vector2 output = nn.predict();
-        verInput = (output[1] - 0.5f) * 2;
-        horInput = (output[0] - 0.5f) * 2;
-        foreach (WheelScript w in wheels)
-        {
-            w.Steer((output[0] - 0.5f) * 2);
-            w.Accelerate((output[1] - 0.5f) * 2 * power, (output[1] - 0.5f) * 2 * brakeTorque);
-            w.UpdatePosition();
+    // void ProcessForces()
+    // {
+    //     output = nn.predict();
+    //     verInput = (output[1] - 0.5f) * 2;
+    //     horInput = (output[0] - 0.5f) * 2;
+    //     foreach (WheelScript w in wheels)
+    //     {
+    //         w.Steer((output[0] - 0.5f) * 2);
+    //         w.Accelerate((output[1] - 0.5f) * 2 * power, (output[1] - 0.5f) * 2 * brakeTorque);
+    //         w.UpdatePosition();
+    //     }
+    // }
+
+    IEnumerator ProcessForcesCoroutine(){
+        while(true){
+            output = nn.predict();
+            verInput = (output[1] - 0.5f) * 2;
+            horInput = (output[0] - 0.5f) * 2;
+            foreach (WheelScript w in wheels)
+            {
+                w.Steer((output[0] - 0.5f) * 2);
+                w.Accelerate((output[1] - 0.5f) * 2 * power, (output[1] - 0.5f) * 2 * brakeTorque);
+                w.UpdatePosition();
+            }
+            for(int i = 0; i < fc; i ++){
+                yield return new WaitForFixedUpdate();
+            }
         }
+    }
+
+    public void StopCar(){
+        StopAllCoroutines();
+        GetComponent<Rigidbody>().isKinematic = true;
+    }
+    public void StartCar(int offset, int frameCount){
+        if(ready_wheels != 4) return;
+        fc = frameCount;
+        StartCoroutine(StartCarCoroutine(offset));
+    }
+
+    IEnumerator StartCarCoroutine(int offset){
+        while((int)(Time.fixedTime / Time.fixedDeltaTime)%fc != offset){
+            yield return new WaitForFixedUpdate();
+        }
+        StartCoroutine(ProcessForcesCoroutine());
     }
 
     //Manual Control
