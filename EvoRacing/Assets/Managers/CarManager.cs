@@ -6,7 +6,7 @@ using UnityEngine;
 public class CarManager : MonoBehaviour
 {
     public delegate void CarAction(GameObject car);
-    GameObject[] cars = new GameObject[0];
+    [SerializeField] GameObject[] cars = new GameObject[0];
     bool isDrive = false;
 
     public void FillNewCars(GameObject[] newCars)
@@ -20,6 +20,8 @@ public class CarManager : MonoBehaviour
             cars[i] = newCars[i];
         }
         isDrive = false;
+        print("Filled:");
+        print(newCars.Length);
     }
 
     public void StartAllCars()

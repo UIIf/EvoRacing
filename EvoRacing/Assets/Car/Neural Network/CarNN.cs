@@ -31,6 +31,10 @@ public class CarNN : MonoBehaviour
     private float[] input = new float[0];
     
 
+    static public void CopySave(string from, string to){
+        PlayerPrefs.SetString("SlotNN" + to, PlayerPrefs.GetString("SlotNN" + from));
+    }
+
 
     public void InitialiseNN(){
         w1 = new float[countOfRays + 2][];

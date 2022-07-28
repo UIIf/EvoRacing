@@ -5,10 +5,10 @@ using System.Linq;
 using UnityEngine.UI;
 
 enum TrainingState{
-    beforeTraining,
     setNN,
     onTraining,
-    endTraining
+    endTraining,
+    pauseTraining
 }
 
 public class TrainingManager : MonoBehaviour
@@ -21,17 +21,12 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] Transform start;
     [SerializeField] GameObject carPrefab;
 
-    [SerializeField] GameObject ScrollView;
-    [SerializeField] GameObject carItem;
-    [SerializeField] GameObject UITime;
-    [SerializeField] GameObject saveWindow;
-    [SerializeField] GameObject loadWindow;
     private Vector3 spawnPoint;
     [SerializeField] private float curTime;
     [SerializeField] private bool AutoStart = true;
-    [SerializeField] string defaultSlot = "main";
+    [SerializeField] string defaultSlot = " main";
 
-    [SerializeField] TrainingState trState = TrainingState.beforeTraining;
+    [SerializeField] TrainingState trState = TrainingState.pauseTraining;
 
 
     void Start()
@@ -51,6 +46,8 @@ public class TrainingManager : MonoBehaviour
 
         //Fill nn for new cars
         string temp_loaded = PlayerPrefs.GetString("SlotNN" + defaultSlot);
+        print("Start");
+        print(trState);
         if (temp_loaded == "")
         {
             RefreshNN();
@@ -59,7 +56,7 @@ public class TrainingManager : MonoBehaviour
         {
             LoadAndMutateNN(defaultSlot);
         }
-        trState = TrainingState.beforeTraining;
+        trState = TrainingState.pauseTraining;
     }
 
     void Update()
@@ -311,49 +308,27 @@ public class TrainingManager : MonoBehaviour
         AutoStart = !AutoStart;
     }
 
-    //VINESTY ---------------------------------------------------------------------
-    // public void CreateTable()
-    // {
-    //     if (ScrollView.activeSelf)
-    //     {
-    //         ScrollView.SetActive(false);
-    //         Transform temp = ScrollView.transform.GetChild(0).transform;
-    //         for (int i = 0; i < temp.childCount; i++)
-    //         {
-    //             Destroy(temp.GetChild(0));
-    //         }
-    //     }
-    //     else
-    //     {
-    //         GameObject[] cars = carManag.GetAllCars();
-    //         ScrollView.SetActive(true);
-    //         Transform content = ScrollView.transform.GetChild(0).transform.GetChild(0);
-    //         cars = cars.OrderBy((car) => car.GetComponent<DistanceFinder>().GetDist()).Reverse<GameObject>().ToArray<GameObject>();
-    //         foreach (GameObject car in cars)
-    //         {
-    //             GameObject temp = Instantiate(carItem, content);
-    //             temp.transform.GetChild(1).GetComponent<Text>().text = "Score: " + car.GetComponent<DistanceFinder>().GetDist().ToString("0,000");
-    //             temp.transform.parent = content;
-    //         }
-    //     }
-
-    // }
 
     public void RefreshNN()
     {
-        if (trState == TrainingState.endTraining || trState == TrainingState.beforeTraining)
+        
+        if (trState == TrainingState.endTraining || trState == TrainingState.pauseTraining)
         {
+            TrainingState temp = trState;
             trState = TrainingState.setNN;
             carManag.ApplyToAll(new CarManager.CarAction(x =>x.GetComponent<CarNN>().InitialiseNN()));
+            carManag.SaveMaxNN(defaultSlot);
+            trState = temp;
         }
     }
 
 
+    
     public void startTrainingSession()
     {
         MM.UnPauseGame();
 
-        if(trState == TrainingState.beforeTraining){
+        if(trState == TrainingState.pauseTraining){
             carManag.StartAllCars();
         }
         else if(trState == TrainingState.endTraining){
@@ -384,13 +359,16 @@ public class TrainingManager : MonoBehaviour
         return curTime;
     }
 
-    //PERENESTI V DRUGOI SCRIPT
+    public void SaveInSlot(string slot){
+        CarNN.CopySave(defaultSlot, slot);
+    }
 
     public void LoadAndMutateNN(string slot)
     {
-        
-        if (trState == TrainingState.endTraining || trState == TrainingState.beforeTraining)
+        if (trState == TrainingState.endTraining || trState == TrainingState.pauseTraining)
         {
+            
+            TrainingState temp = trState;
             trState = TrainingState.setNN;
             carManag.LoadNNTo(slot, 0);
             GameObject[] cars = carManag.GetAllCars();
@@ -402,105 +380,35 @@ public class TrainingManager : MonoBehaviour
             for (int i = 1; i < cars.Length; i++)
             {
                 cars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.mutate(w1, trSettings.percentOfMutation, trSettings.mutationValue), NeuralNetwork.mutate(w2, trSettings.percentOfMutation, trSettings.mutationValue), NeuralNetwork.mutate(w3, trSettings.percentOfMutation, trSettings.mutationValue));
+                print(cars[i].GetComponent<CarNN>().getW1());
             }
+            trState = temp;
         }
-
+        RestartTraining();
     }
-    public void SubmitSave()
-    {
-        InputField saveText = saveWindow.transform.Find("InputField").GetComponent<InputField>();
 
-        if (saveText.text != "" && saveText.text.Length < 10)
+    public void RestartTraining(){
+        trState = TrainingState.setNN;
+        curTime = 0f;
+
+        carPrefab.GetComponent<DistanceFinder>().dFSettings = dFSettings;
+
+        //Initialise cars for car manager
+        GameObject[] cars =  carManag.GetAllCars();
+        GameObject[] newCars = new GameObject[trSettings.carNum];
+        spawnPoint = new Vector3(start.position.x, start.position.y + 1.3f, start.position.z);
+        for (int i = 0; i < trSettings.carNum; i++)
         {
-            string slot = saveText.text.Replace(' ', '_');
-            saveText.text = "";
-            carManag.SaveMaxNN(slot);
-            SaveSlotName(slot);
-            SaveWindowSwitch();
-        }
-    }
-    void BuildLoadWindow()
-    {
-        Transform content = loadWindow.transform.Find("Viewport").Find("Content");
-        GameObject template = content.Find("Template").gameObject;
-
-        for (int i = 0; i < loadWindow.transform.Find("Viewport").Find("Content").childCount; i++)
-        {
-            if (content.GetChild(i).name != "Template")
-                Destroy(content.GetChild(i).gameObject);
+            newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
+            CarNN tempNN = cars[i].GetComponent<CarNN>();
+            print(tempNN.getW1());
+            newCars[i].GetComponent<CarNN>().FillNN(tempNN.getW1(), tempNN.getW2(), tempNN.getW3());
         }
 
-        string[] slots = PlayerPrefs.GetString("AllTheSlots").Split(' ');
+        carManag.FillNewCars(newCars);
 
-        foreach (string element in slots)
-        {
-            if (element == "") continue;
-            GameObject newElement = Instantiate(template, content);
-            Text newElementNameText = newElement.transform.Find("SlotName").GetComponent<Text>();
-            //Text newElementGenNumText = newElement.transform.Find("GenerationsNum").GetComponent<Text>();
-            Button newElementDeleteButton = newElement.transform.Find("DeleteButton").GetComponent<Button>();
-            Button newElementButton = newElement.GetComponent<Button>();
-
-            newElementNameText.text = element;
-            newElementButton.onClick.AddListener(() => LoadAndMutateNN(element));
-            newElementButton.onClick.AddListener(() => LoadWindowSwitch());
-
-            newElementDeleteButton.onClick.AddListener(() => DeleteSlot(element));
-
-            newElement.SetActive(true);
-        }
-    }
-    void SaveSlotName(string slot)
-    {
-        string str = PlayerPrefs.GetString("AllTheSlots");
-
-        if (str == "")
-            PlayerPrefs.SetString("AllTheSlots", slot + " ");
-        else
-        {
-            if (str.Contains(slot + " ")) return;
-
-            PlayerPrefs.SetString("AllTheSlots", str + slot + " ");
-        }
-    }
-    public void SaveWindowSwitch()
-    {
-
-        if (saveWindow.activeSelf)
-            saveWindow.SetActive(false);
-        else
-            saveWindow.SetActive(true);
-    }
-    public void LoadWindowSwitch()
-    {
-
-        if (loadWindow.activeSelf)
-            loadWindow.SetActive(false);
-        else
-        {
-            loadWindow.SetActive(true);
-            BuildLoadWindow();
-        }
-    }
-    public void ResetCarPosition()
-    {
-        foreach (GameObject car in carManag.GetAllCars())
-        {
-            car.transform.position = spawnPoint;
-            car.transform.rotation = carPrefab.transform.rotation;
-        }
+        trState = TrainingState.pauseTraining;
     }
 
-    public void DeleteSlot(string element){
-        
 
-        PlayerPrefs.DeleteKey(element);
-
-        string slots = PlayerPrefs.GetString("AllTheSlots");
-        
-
-        PlayerPrefs.SetString("AllTheSlots", slots.Remove(slots.IndexOf(element), element.Length + 1));
-        
-        BuildLoadWindow();
-    }
 }
