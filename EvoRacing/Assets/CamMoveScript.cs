@@ -17,7 +17,6 @@ public class CamMoveScript : MonoBehaviour
 
     private void Update()
     {
-        //if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
 
         if (Input.touchCount >= 1 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             plane.SetNormalAndPosition(transform.up, transform.position);
@@ -40,7 +39,7 @@ public class CamMoveScript : MonoBehaviour
             var pos2b = PlanePosition(Input.GetTouch(1).position - Input.GetTouch(1).deltaPosition);
 
             var zoom = Vector3.Distance(pos1, pos2) / Vector3.Distance(pos1b, pos2b);
-            if (cameras[0].transform.position.y < 5 || zoom == 0 || zoom > 10)
+            if (cameras[0].transform.position.y < 5 || cameras[0].transform.position.y > 253 || zoom == 0 || zoom > 10)
                 return;
 
             cameras[0].transform.position = Vector3.LerpUnclamped(pos1, cameras[0].transform.position, 1 / zoom);
@@ -51,6 +50,9 @@ public class CamMoveScript : MonoBehaviour
 
         if (cameras[0].transform.position.y < 8)
             cameras[0].transform.position += Vector3.up*Time.deltaTime;
+
+        if (cameras[0].transform.position.y > 250)
+            cameras[0].transform.position -= Vector3.up * Time.deltaTime;
     }
 
     private Vector3 PlanePositionDelta(Touch touch)

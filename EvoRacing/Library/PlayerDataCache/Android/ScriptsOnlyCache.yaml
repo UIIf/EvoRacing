@@ -880,7 +880,7 @@ ScriptsOnlyBuild:
     className: TMP_SpriteAsset
   - hash:
       serializedVersion: 2
-      Hash: 756f7d0f0edeb7e4e64ff1c7dc1d217c
+      Hash: 363d2a5eb834bfd5f6abe0b975ac95b7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DistanceFinder
@@ -938,4 +938,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Garage.unity
   - Assets/Scenes/TrainingField.unity
   - Assets/Scenes/TrackEditor.unity
-  playerPath: C:/Users/sereg/Desktop/EvoRac_3.apk
+  playerPath: C:/evoracing_1/EVO_3.apk
