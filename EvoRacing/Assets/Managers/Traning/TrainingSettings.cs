@@ -40,6 +40,42 @@ public class TrainingSettings : MonoBehaviour
         _carNum = val;
     }
 
+    [Header("Count of slected cars")]
+    [SerializeField] int _selCarNum = 10;
+    [HideInInspector]
+    public int selCarNum{
+        get => _selCarNum;
+    }
+    [SerializeField] int minSelCarNum = 0;
+    
+
+    //Count of cars
+    public void ChangeSelCarNum(int val){
+        if(_selCarNum + val < minSelCarNum){
+            _selCarNum = minSelCarNum;
+            return;
+        }
+        if(_selCarNum + val > maxCarNum){
+            _selCarNum = maxCarNum;
+            return;
+        }
+        
+        _selCarNum += val;
+    }
+
+    public void SetSelCarNum(int val){
+        if(val < minSelCarNum){
+            _selCarNum = minSelCarNum;
+            return;
+        }
+        if(val > maxCarNum){
+            _selCarNum = maxCarNum;
+            return;
+        }
+        
+        _selCarNum = val;
+    }
+
     [Header("Count of childrens")]
     [SerializeField] int _from2Parents = 5;
     [HideInInspector]

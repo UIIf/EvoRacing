@@ -77,11 +77,10 @@ public class CarScript : MonoBehaviour
     }
 
     IEnumerator StartCarCoroutine(int offset){
-        print(offset);
         while ((int)(Time.fixedTime / Time.fixedDeltaTime)%fc != offset || ready_wheels != 4){         
             yield return new WaitForFixedUpdate();
         }
-        print("STARTED");
+        // print("Started");
         StartCoroutine(ProcessForcesCoroutine());
     }
 

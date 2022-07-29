@@ -20,6 +20,8 @@ public class TrainingManager : MonoBehaviour
     [SerializeField] MainManager MM;
     [SerializeField] Transform start;
     [SerializeField] GameObject carPrefab;
+    [SerializeField] GameObject[] newCars;
+    [SerializeField] int newCarLastIndex = 0;
 
     private Vector3 spawnPoint;
     [SerializeField] private float curTime;
@@ -71,234 +73,93 @@ public class TrainingManager : MonoBehaviour
         }
     }
 
-    void Training()
-    {
-        trState = TrainingState.setNN;
-        curTime = 0;
-        GameObject[] cars = carManag.GetAllCars();
-        // float[] scores = new float[cars.Length];
+    List<Vector2> GetScores(){
         List<Vector2> scores = new List<Vector2>();
-        float total_score = 0;
-        float temp;
-        // string output = "Scores : ";
+        GameObject[] cars = carManag.GetAllCars();
         for (int i = 0; i < cars.Length; i++)
         {
-            temp = cars[i].GetComponent<DistanceFinder>().GetDist();
-            scores.Add(new Vector2(temp * temp, i));
-            total_score += scores[i][0];
-            // output += scores[i][0].ToString() + " ";
+            scores.Add(new Vector2(cars[i].GetComponent<DistanceFinder>().GetDist(), i));
         }
+        
+        return scores;
+    }
 
-        // print(output);
+    int findNewParent(List<Vector2> scores, float total_score){
+        float parent = Random.Range(0f, total_score);
+        float temp_sum = 0;
+        int ret = 0;
+        for (int i = 0; i < scores.Count; i++)
+        {
+            if (temp_sum < parent && scores[i][0] + temp_sum >= parent)
+            {
+                ret = (int)(scores[i][1]);
+                break;
+            }
+            temp_sum += scores[i][0];
+        }
+        return ret;
+    }
 
-        //Shuffle
-        scores = scores.OrderBy(x => Random.value).ToList();
+    void Selection(List<Vector2> scores){
+        GameObject[] cars = carManag.GetAllCars();
+        CarNN tempNN;
+        for(int i = 0; i < trSettings.selCarNum && i < newCarLastIndex + 1 + trSettings.carNum; i++){
+            tempNN = cars[(int)scores[i][1]].GetComponent<CarNN>();
+            newCars[i + newCarLastIndex + 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
+            newCars[i + newCarLastIndex + 1].GetComponent<CarNN>().FillNN(tempNN.getW1(), tempNN.getW2(),tempNN.getW3());
+        }
+        newCarLastIndex += trSettings.selCarNum;
+    }
 
-        int newCarNum = trSettings.carNum;
-        GameObject[] newCars = new GameObject[trSettings.carNum];
-        int offset = 0;
-        float priority, parent, temp_sum;
+    void NextGen(List<Vector2> scores){
+        float total_score = scores.Sum(x => x[0]);
+        GameObject[] cars = carManag.GetAllCars();
+        CarNN temp;
+        float priority = 0.5f;
         float[][] p1W1, p1W2, p1W3, p2W1, p2W2, p2W3;
         int parent1, parent2;
+        int addedPerParents;
+        
+        while(newCarLastIndex + 1 < trSettings.carNum){
+            parent1 = findNewParent(scores, total_score);
 
+            temp = cars[parent1].GetComponent<CarNN>();
+            p1W1 = temp.getW1();
+            p1W2 = temp.getW2();
+            p1W3 = temp.getW3();
 
-        //First best parents
-        {
-            float p1Score;
-            float p2Score;
-            if (scores[0][0] > scores[1][0])
-            {
-                parent1 = (int)scores[0][1];
-                p1Score = scores[0][0];
-                parent2 = (int)scores[1][1];
-                p2Score = scores[1][0];
+            parent2 = findNewParent(scores, total_score);
+
+            temp = cars[parent2].GetComponent<CarNN>();
+            p2W1 = temp.getW1();
+            p2W2 = temp.getW2();
+            p2W3 = temp.getW3();
+
+            addedPerParents = 0;
+            for(int i = 0; i < trSettings.from2Parents && i + newCarLastIndex + 1 <  trSettings.carNum; i++){
+                newCars[i + newCarLastIndex + 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
+                newCars[i + newCarLastIndex + 1].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1,p2W1, trSettings.percentOfMutation, priority), NeuralNetwork.merge_mutate(p1W2,p2W2, trSettings.percentOfMutation, priority), NeuralNetwork.merge_mutate(p1W3,p2W3, trSettings.percentOfMutation, priority));
+                addedPerParents++;
             }
-            else
-            {
-                parent1 = (int)scores[1][1];
-                p1Score = scores[1][0];
-                parent2 = (int)scores[0][1];
-                p2Score = scores[0][0];
-            }
-            for (int i = 2; i < scores.Count; i++)
-            {
-                if (scores[i][0] > p1Score)
-                {
-                    parent2 = parent1;
-                    p2Score = p1Score;
-                    parent1 = (int)scores[i][1];
-                    p1Score = scores[i][0];
-                }
-                else if (scores[i][0] > p2Score)
-                {
-                    parent2 = (int)scores[i][1];
-                    p2Score = scores[i][0];
-                }
-            }
-
-            // print(p1Score);
-
-            // Current parent weights
-            p1W1 = cars[parent1].GetComponent<CarNN>().getW1();
-            p1W2 = cars[parent1].GetComponent<CarNN>().getW2();
-            p1W3 = cars[parent1].GetComponent<CarNN>().getW3();
-
-            p2W1 = cars[parent2].GetComponent<CarNN>().getW1();
-            p2W2 = cars[parent2].GetComponent<CarNN>().getW2();
-            p2W3 = cars[parent1].GetComponent<CarNN>().getW3();
-
-
-            priority = 0.5f;
-            for (int i = 0; i < trSettings.from2Parents - 2; i++)
-            {
-                newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-                newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, trSettings.percentOfMutation, trSettings.mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, trSettings.percentOfMutation, trSettings.mutationValue, priority), NeuralNetwork.merge_mutate(p1W3, p2W3, trSettings.percentOfMutation, trSettings.mutationValue, priority));
-            }
-            // Mutated parents
-
-            newCars[trSettings.from2Parents - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[trSettings.from2Parents - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2, p1W3);
-
-            newCars[trSettings.from2Parents - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[trSettings.from2Parents - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2, p2W3);
-
-            offset++;
-            newCarNum -= trSettings.from2Parents;
+            newCarLastIndex += addedPerParents;
         }
+    }
 
-        //Main part of mutation 
-        {
-            // Childrens that into
-            while (newCarNum / ((float)(trSettings.from2Parents)) >= 2)
-            {
+    void Training(){
+        trState = TrainingState.setNN;
 
+        newCars = new GameObject[trSettings.carNum];
+        newCarLastIndex = -1;
 
-                // Find new parents
-                parent = Random.Range(0f, total_score);
-                temp_sum = 0;
-                parent1 = 0;
-                for (int i = 0; i < scores.Count; i++)
-                {
-                    if (temp_sum < parent && scores[i][0] + temp_sum >= parent)
-                    {
-                        parent1 = (int)(scores[i][1]);
-                        // total_score -= scores[i][0];
-                        // scores.Remove(scores[i]);
-                        break;
-                    }
-                    temp_sum += scores[i][0];
-                }
+        List<Vector2> scores = GetScores();
 
+        scores = scores.OrderBy(x => x[0]).ToList();
+        Selection(scores);
 
-                parent = Random.Range(0f, total_score);
-                temp_sum = 0;
-                parent2 = 0;
-                for (int i = 0; i < scores.Count; i++)
-                {
-                    if (temp_sum < parent && scores[i][0] + temp_sum >= parent)
-                    {
-                        parent2 = (int)(scores[i][1]);
-                        // total_score -= scores[i][0];
-                        // scores.Remove(scores[i]);
-                        break;
-                    }
-                    temp_sum += scores[i][0];
-                }
+        scores = scores.OrderBy(x => Random.value).ToList();
+        NextGen(scores);
 
-
-                // Current parent weights
-                p1W1 = cars[parent1].GetComponent<CarNN>().getW1();
-                p1W2 = cars[parent1].GetComponent<CarNN>().getW2();
-                p1W3 = cars[parent1].GetComponent<CarNN>().getW3();
-
-                p2W1 = cars[parent2].GetComponent<CarNN>().getW1();
-                p2W2 = cars[parent2].GetComponent<CarNN>().getW2();
-                p2W3 = cars[parent1].GetComponent<CarNN>().getW3();
-
-                // Mutated childrens
-
-                priority = 0.5f;
-                for (int i = offset * trSettings.from2Parents; i < (offset + 1) * trSettings.from2Parents - 2; i++)
-                {
-                    newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-                    newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, trSettings.percentOfMutation, trSettings.mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, trSettings.percentOfMutation, trSettings.mutationValue, priority), NeuralNetwork.merge_mutate(p1W3, p2W3, trSettings.percentOfMutation, trSettings.mutationValue, priority));
-                }
-                // Mutated parents
-
-                newCars[(offset + 1) * trSettings.from2Parents - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-                newCars[(offset + 1) * trSettings.from2Parents - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2, p1W3);
-
-                newCars[(offset + 1) * trSettings.from2Parents - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-                newCars[(offset + 1) * trSettings.from2Parents - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2, p2W3);
-
-                offset++;
-                newCarNum -= trSettings.from2Parents;
-            }
-        }
-
-        //Other childrens
-        {
-
-            parent = Random.Range(0f, total_score);
-            temp_sum = 0;
-            parent1 = 0;
-            for (int i = 0; i < scores.Count; i++)
-            {
-                if (temp_sum < parent && scores[i][0] + temp_sum >= parent)
-                {
-                    parent1 = (int)(scores[i][1]);
-                    // total_score -= scores[i][0];
-                    // scores.Remove(scores[i]);
-                    break;
-                }
-                temp_sum += scores[i][0];
-            }
-
-
-            parent = Random.Range(0f, total_score);
-            temp_sum = 0;
-            parent2 = 0;
-            for (int i = 0; i < scores.Count; i++)
-            {
-                if (temp_sum < parent && scores[i][0] + temp_sum >= parent)
-                {
-                    parent2 = (int)(scores[i][1]);
-                    // total_score -= scores[i][0];
-                    // scores.Remove(scores[i]);
-                    break;
-                }
-                temp_sum += scores[i][0];
-            }
-
-            // print(max_.ToString() + " : " + scores[max_].ToString() + "; " + semi_max.ToString()+ " : " + scores[semi_max].ToString() );
-
-            p1W1 = cars[parent1].GetComponent<CarNN>().getW1();
-            p1W2 = cars[parent1].GetComponent<CarNN>().getW2();
-            p1W3 = cars[parent1].GetComponent<CarNN>().getW3();
-
-            p2W1 = cars[parent2].GetComponent<CarNN>().getW1();
-            p2W2 = cars[parent2].GetComponent<CarNN>().getW2();
-            p2W3 = cars[parent1].GetComponent<CarNN>().getW3();
-
-            // Mutated childrens
-            priority = 0.5f;
-            for (int i = offset * trSettings.from2Parents; i < offset * trSettings.from2Parents + newCarNum - 2; i++)
-            {
-                newCars[i] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-
-                newCars[i].GetComponent<CarNN>().FillNN(NeuralNetwork.merge_mutate(p1W1, p2W1, trSettings.percentOfMutation, trSettings.mutationValue, priority), NeuralNetwork.merge_mutate(p1W2, p2W2, trSettings.percentOfMutation, trSettings.mutationValue, priority), NeuralNetwork.merge_mutate(p1W3, p2W3, trSettings.percentOfMutation, trSettings.mutationValue, priority));
-            }
-
-            // Mutated parents
-
-            newCars[offset * trSettings.from2Parents + newCarNum - 2] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[offset * trSettings.from2Parents + newCarNum - 2].GetComponent<CarNN>().FillNN(p1W1, p1W2, p1W3);
-
-            newCars[offset * trSettings.from2Parents + newCarNum - 1] = Instantiate(carPrefab, spawnPoint, carPrefab.transform.rotation);
-            newCars[offset * trSettings.from2Parents + newCarNum - 1].GetComponent<CarNN>().FillNN(p2W1, p2W2, p2W3);
-        }
         carManag.FillNewCars(newCars);
-        trState = TrainingState.onTraining;
     }
 
     public void changeAutoStart()
@@ -310,14 +171,13 @@ public class TrainingManager : MonoBehaviour
     public void RefreshNN()
     {
         
-        if (trState == TrainingState.endTraining || trState == TrainingState.pauseTraining)
-        {
-            TrainingState temp = trState;
+        // if (trState == TrainingState.endTraining || trState == TrainingState.pauseTraining)
+        // {
             trState = TrainingState.setNN;
             carManag.ApplyToAll(new CarManager.CarAction(x =>x.GetComponent<CarNN>().InitialiseNN()));
             carManag.SaveMaxNN(defaultSlot);
-            trState = temp;
-        }
+            RestartTraining();
+        // }
     }
 
 
