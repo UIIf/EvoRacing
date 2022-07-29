@@ -10,6 +10,7 @@ ScriptsOnlyBuild:
     - DistanceFinder
     - GetTime
     - MainManager
+    - SaveLoadManager
     - TrackEditorManager
     - TrainingManager
     - TrainingSettings
@@ -71,6 +72,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 1436}
     - Class: 114
@@ -96,7 +99,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3106}
     - Class: 114
-      Script: {instanceID: 4106}
+      Script: {instanceID: 4108}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -138,8 +141,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 64
-      Script: {instanceID: 0}
     - Class: 65
       Script: {instanceID: 0}
     - Class: 81
@@ -147,6 +148,8 @@ ScriptsOnlyBuild:
     - Class: 89
       Script: {instanceID: 0}
     - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
       Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 1436}
@@ -161,8 +164,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2586}
     - Class: 114
-      Script: {instanceID: 2590}
-    - Class: 114
       Script: {instanceID: 2772}
     - Class: 114
       Script: {instanceID: 2858}
@@ -174,11 +175,13 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 136
       Script: {instanceID: 0}
-    - Class: 146
-      Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
       Script: {instanceID: 0}
     - Class: 212
       Script: {instanceID: 0}
@@ -217,6 +220,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 1436}
     - Class: 114
@@ -244,9 +249,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3584}
     - Class: 114
-      Script: {instanceID: 3716}
+      Script: {instanceID: 3718}
     - Class: 114
-      Script: {instanceID: 4230}
+      Script: {instanceID: 4232}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -256,6 +261,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -293,6 +300,8 @@ ScriptsOnlyBuild:
     - Class: 89
       Script: {instanceID: 0}
     - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
       Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 1436}
@@ -343,17 +352,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3584}
     - Class: 114
-      Script: {instanceID: 3716}
+      Script: {instanceID: 3642}
     - Class: 114
-      Script: {instanceID: 3888}
+      Script: {instanceID: 3718}
     - Class: 114
-      Script: {instanceID: 3972}
+      Script: {instanceID: 3890}
     - Class: 114
-      Script: {instanceID: 4106}
+      Script: {instanceID: 3974}
     - Class: 114
-      Script: {instanceID: 4230}
+      Script: {instanceID: 4108}
     - Class: 114
-      Script: {instanceID: 4436}
+      Script: {instanceID: 4232}
+    - Class: 114
+      Script: {instanceID: 4438}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -369,6 +380,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -663,7 +676,7 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   - hash:
       serializedVersion: 2
-      Hash: 94eb3f80b68ae5818ff78e73a1dfe8da
+      Hash: a17c360c5a89b636ff0b5406974cd241
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CarScript
@@ -753,13 +766,13 @@ ScriptsOnlyBuild:
     className: Gates
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 4f4cfc8e03937e3988c566930bd76126
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CarManager
   - hash:
       serializedVersion: 2
-      Hash: 9e9f17f9ac11381a132f3b053afee368
+      Hash: 2520c007008b3b850a54e1e6c70aba91
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TrainingManager
@@ -787,6 +800,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Mask
+  - hash:
+      serializedVersion: 2
+      Hash: 046e334c7f7d76016cc0c92f0315c0d5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SaveLoadManager
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb

@@ -174,7 +174,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.8
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.17
   m_ForceAppPointDistance: 0
   m_Mass: 13
   m_WheelDampingRate: 0.1
@@ -297,7 +297,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.8
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.17
   m_ForceAppPointDistance: 0
   m_Mass: 13
   m_WheelDampingRate: 0.1
@@ -679,7 +679,6 @@ MonoBehaviour:
   - {fileID: 2125985157069787959}
   - {fileID: 2125985158042865241}
   - {fileID: 2125985158180949758}
-  run: 0
 --- !u!114 &6904812736249495946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -779,7 +778,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.8
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.17
   m_ForceAppPointDistance: 0
   m_Mass: 13
   m_WheelDampingRate: 0.1
@@ -840,7 +839,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.8
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.17
   m_ForceAppPointDistance: 0
   m_Mass: 13
   m_WheelDampingRate: 0.1
