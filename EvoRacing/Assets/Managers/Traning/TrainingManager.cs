@@ -153,7 +153,7 @@ public class TrainingManager : MonoBehaviour
 
         List<Vector2> scores = GetScores();
 
-        scores = scores.OrderBy(x => x[0]).ToList();
+        scores = scores.OrderBy(x => x[0]).Reverse().ToList();
         Selection(scores);
 
         scores = scores.OrderBy(x => Random.value).ToList();
@@ -200,7 +200,6 @@ public class TrainingManager : MonoBehaviour
     public void StopTrainingSession(){
         if(trState == TrainingState.onTraining){
             carManag.SaveMaxNN(defaultSlot);
-            carManag.StopAllCars();
             curTime = trSettings.time;
             trState = TrainingState.endTraining;
             if (AutoStart)

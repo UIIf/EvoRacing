@@ -5,7 +5,7 @@ using UnityEngine;
 enum DFStates{
     valid,
     invalid,
-    finiched
+    finished
 }
 
 public class DistanceFinder : MonoBehaviour
@@ -19,12 +19,11 @@ public class DistanceFinder : MonoBehaviour
     private Vector3 prevPos = Vector3.zero;
     [SerializeField] private Vector3 curPos = Vector3.zero;
     [SerializeField] private float distance = 0;
-    [SerializeField] private bool valid = true;
     [SerializeField] private Material invalidMaterial;
     [SerializeField] private MeshRenderer carBody;
-    private bool touching = false;
 
-    private bool finished = false;
+    [SerializeField] DFStates dfState = DFStates.valid;
+    private bool touching = false;
 
     private void ChangeMat()
     {
@@ -41,8 +40,7 @@ public class DistanceFinder : MonoBehaviour
     public void Refresh()
     {
         touching = false;
-        finished = false;
-        valid = true;
+        dfState = DFStates.valid;
         prevPos = Vector3.zero;
         curPos = Vector3.zero;
         distance = 0;
@@ -53,7 +51,7 @@ public class DistanceFinder : MonoBehaviour
         switch (other.tag)
         {
             case "CheckPoint":
-                if (!valid || touching)
+                if (dfState == DFStates.invalid || touching)
                 {
                     break;
                 }
@@ -70,7 +68,7 @@ public class DistanceFinder : MonoBehaviour
                 {
                     distance -= treatFCheckPoint * 2;
                     ChangeMat();
-                    valid = false;
+                    dfState = DFStates.invalid;
                 }
 
 
@@ -80,12 +78,11 @@ public class DistanceFinder : MonoBehaviour
                 curPos = other.transform.position;
                 distance += (prevPos - other.transform.position).magnitude;
                 distance += treatFCheckPoint;
-
                 break;
 
             case "Fin":
                 distance += finTreat;
-                finished = true;
+                dfState = DFStates.finished;
                 break;
 
         }
@@ -94,14 +91,14 @@ public class DistanceFinder : MonoBehaviour
 
     private void OnCollisionStay(Collision collisionInfo)
     {
-        if (valid && !finished)
+        if (dfState == DFStates.valid)
             if (collisionInfo.gameObject.layer == wallMask)
             {
                 distance -= wallTrick * Time.deltaTime;
                 if (distance < 0)
                 {
                     ChangeMat();
-                    valid = false;
+                    dfState = DFStates.invalid;
                 }
             }
     }
@@ -113,7 +110,7 @@ public class DistanceFinder : MonoBehaviour
 
     private void Update()
     {
-        if (finished)
+        if (dfState == DFStates.finished)
         {
             distance += scoreAfterFin * Time.deltaTime;
         }
@@ -121,13 +118,12 @@ public class DistanceFinder : MonoBehaviour
 
     public float GetDist()
     {
-        if (valid && !finished)
+        if (dfState == DFStates.valid)
             return distance + (curPos - transform.position).magnitude;
         return distance;
     }
 
     public void StopDF(){
-        valid = false;
-        finished = false;
+        dfState = DFStates.invalid;
     }
 }

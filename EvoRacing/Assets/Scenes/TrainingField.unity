@@ -7072,7 +7072,7 @@ MonoBehaviour:
   _scoreAfterFin: 15
   minScoreAfterFin: -2000
   maxScoreAfterFin: 2000
-  _wallTrick: 1000
+  _wallTrick: -1000
   minWallTrick: -2000
   maxWallTrick: 2000
 --- !u!1 &1244590973
